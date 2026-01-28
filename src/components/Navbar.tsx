@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import Container from "./Container";
 import logo from "../assets/logo/mineria-del-sur.png";
 import { NAV } from "../lib/constants";
 
@@ -74,12 +73,14 @@ export default function Navbar() {
 
   const divider = scrolled ? "bg-slate-200" : "bg-white/15";
 
+  // Wrapper “wide” SOLO para el navbar (estilo corporativo/BHP)
+  const NavContainer = ({ children }: { children: React.ReactNode }) => (
+    <div className="w-full px-6 lg:px-10">{children}</div>
+  );
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 m-0 p-0 w-full">
-      {/* ✅ Ponemos el fondo AQUÍ (cubre safe-area) */}
-      <div
-        className={`w-full transition-all duration-300 ease-out ${wrapperBg} pt-[env(safe-area-inset-top,0px)]`}
-      >
+      <div className={`w-full transition-all duration-300 ease-out ${wrapperBg}`}>
         {/* Línea superior */}
         <div
           className={`h-[2px] w-full transition-all duration-300 ${
@@ -90,7 +91,7 @@ export default function Navbar() {
         />
 
         {/* TOP BAR */}
-        <Container>
+        <NavContainer>
           <div className="flex h-12 items-center justify-end gap-5 text-sm">
             <a
               href="#contacto"
@@ -111,44 +112,30 @@ export default function Navbar() {
               </span>
             </button>
           </div>
-        </Container>
+        </NavContainer>
 
         {/* Divider */}
         <div className={`h-px ${divider}`} />
 
         {/* MAIN NAV */}
-        <Container>
-          <div className="flex h-[84px] items-center">
+        <NavContainer>
+          {/* ✅ Logo + links PARTEN desde la izquierda (tipo BHP) */}
+          <div className="flex h-[84px] items-center gap-10">
+            {/* Logo */}
             <a
               href="#top"
-              className="flex items-center gap-4 pr-6 lg:pr-24"
+              className="flex items-center shrink-0"
               onClick={() => setMobileOpen(false)}
             >
               <img
                 src={logo}
                 alt="Minería del Sur"
-                className="h-11 w-11 rounded-md object-contain"
+                className="h-14 w-14 md:h-16 md:w-16 object-contain"
               />
-              <div className="leading-tight">
-                <div
-                  className={`text-base font-semibold transition ${
-                    scrolled ? "text-slate-950" : "text-white"
-                  }`}
-                >
-                  Minería del Sur
-                </div>
-                <div
-                  className={`text-sm transition ${
-                    scrolled ? "text-slate-500" : "text-white/70"
-                  }`}
-                >
-                  Proyecto Cumbres de Cortadera
-                </div>
-              </div>
             </a>
 
-            {/* Desktop links */}
-            <nav className="hidden lg:flex items-center gap-3 ml-auto">
+            {/* Desktop links (SIN ml-auto, quedan a la izquierda) */}
+            <nav className="hidden lg:flex items-center gap-8">
               {NAV.map((l) => {
                 const isActive = active === l.href;
                 return (
@@ -156,15 +143,15 @@ export default function Navbar() {
                     key={l.href}
                     href={l.href}
                     className={`
-                      group relative px-3 py-2 rounded-lg
-                      text-[15px] font-semibold tracking-wide
+                      group relative px-2 py-2 rounded-md
+                      text-[14px] font-semibold tracking-wide
                       transition-all duration-300
                       ${linkBase}
                     `}
                   >
                     <span
                       className={`
-                        absolute inset-0 rounded-lg transition duration-300
+                        absolute inset-0 rounded-md transition duration-300
                         ${linkBgHover}
                       `}
                     />
@@ -172,7 +159,7 @@ export default function Navbar() {
 
                     <span
                       className={`
-                        absolute left-3 right-3 -bottom-[7px]
+                        absolute left-2 right-2 -bottom-[7px]
                         h-[2px] rounded-full bg-brand
                         transition-transform duration-300 origin-left
                         ${
@@ -187,7 +174,7 @@ export default function Navbar() {
               })}
             </nav>
 
-            {/* Mobile button */}
+            {/* Mobile button (se va a la derecha en mobile) */}
             <button
               type="button"
               className={`ml-auto lg:hidden inline-flex items-center justify-center rounded-xl border px-3 py-2 transition ${
@@ -227,12 +214,12 @@ export default function Navbar() {
               </svg>
             </button>
           </div>
-        </Container>
+        </NavContainer>
 
         {/* Mobile dropdown */}
         {mobileOpen && (
           <div className={`lg:hidden border-t ${divider}`}>
-            <Container>
+            <NavContainer>
               <div className="py-4">
                 <div className="flex flex-col gap-1">
                   {NAV.map((l) => {
@@ -258,7 +245,7 @@ export default function Navbar() {
                   })}
                 </div>
               </div>
-            </Container>
+            </NavContainer>
           </div>
         )}
       </div>
