@@ -13,7 +13,6 @@ export default function Navbar() {
     []
   );
 
-  // Detecta scroll (para cambiar a fondo blanco)
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     onScroll();
@@ -21,7 +20,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Cierra el menú móvil al cambiar tamaño a desktop
   useEffect(() => {
     const onResize = () => {
       if (window.innerWidth >= 1024) setMobileOpen(false);
@@ -30,13 +28,11 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Cierra el menú móvil cuando haces click en un link
   const handleNavClick = (href: string) => {
     setActive(href);
     setMobileOpen(false);
   };
 
-  // Sección activa (solo en desktop / general)
   useEffect(() => {
     const sections = ids
       .map((h) => document.querySelector(h))
@@ -79,18 +75,20 @@ export default function Navbar() {
   const divider = scrolled ? "bg-slate-200" : "bg-white/15";
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 m-0 p-0 w-full relative">
-      {/* Línea superior (absolute para eliminar el gap de 1px) */}
+    <header className="fixed top-0 left-0 right-0 z-50 m-0 p-0 w-full">
+      {/* ✅ Ponemos el fondo AQUÍ (cubre safe-area) */}
       <div
-        className={`absolute top-0 left-0 right-0 h-[2px] transition-all duration-300 ${
-          scrolled
-            ? "bg-brand"
-            : "bg-gradient-to-r from-brand/70 via-white/20 to-brand/70"
-        }`}
-      />
+        className={`w-full transition-all duration-300 ease-out ${wrapperBg} pt-[env(safe-area-inset-top,0px)]`}
+      >
+        {/* Línea superior */}
+        <div
+          className={`h-[2px] w-full transition-all duration-300 ${
+            scrolled
+              ? "bg-brand"
+              : "bg-gradient-to-r from-brand/70 via-white/20 to-brand/70"
+          }`}
+        />
 
-      {/* Wrapper (pt-[2px] para compensar la línea superior) */}
-      <div className={`pt-[2px] transition-all duration-300 ease-out ${wrapperBg}`}>
         {/* TOP BAR */}
         <Container>
           <div className="flex h-12 items-center justify-end gap-5 text-sm">
@@ -121,7 +119,6 @@ export default function Navbar() {
         {/* MAIN NAV */}
         <Container>
           <div className="flex h-[84px] items-center">
-            {/* Brand */}
             <a
               href="#top"
               className="flex items-center gap-4 pr-6 lg:pr-24"
@@ -165,7 +162,6 @@ export default function Navbar() {
                       ${linkBase}
                     `}
                   >
-                    {/* Hover pill */}
                     <span
                       className={`
                         absolute inset-0 rounded-lg transition duration-300
@@ -174,7 +170,6 @@ export default function Navbar() {
                     />
                     <span className="relative z-10">{l.label}</span>
 
-                    {/* Underline */}
                     <span
                       className={`
                         absolute left-3 right-3 -bottom-[7px]
@@ -204,7 +199,6 @@ export default function Navbar() {
               aria-label="Abrir menú"
               aria-expanded={mobileOpen}
             >
-              {/* Icon */}
               <svg
                 width="22"
                 height="22"
@@ -237,11 +231,7 @@ export default function Navbar() {
 
         {/* Mobile dropdown */}
         {mobileOpen && (
-          <div
-            className={`lg:hidden border-t ${
-              scrolled ? "border-slate-200" : "border-white/15"
-            }`}
-          >
+          <div className={`lg:hidden border-t ${divider}`}>
             <Container>
               <div className="py-4">
                 <div className="flex flex-col gap-1">

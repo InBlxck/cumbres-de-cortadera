@@ -6,7 +6,7 @@ import heroImg from "../assets/photos/hero.jpg";
 
 export default function Hero() {
   return (
-    <section id="top" className="relative pt-[140px]">
+    <section id="top" className="relative pt-[var(--nav-h)]">
       {/* Imagen principal */}
       <div className="relative h-[62vh] min-h-[520px] w-full overflow-hidden">
         <img
