@@ -6,13 +6,17 @@ import ExecutiveSummary from "../sections/ExecutiveSummary";
 import InvestorOpportunity from "../sections/InvestorOpportunity";
 import Milestones from "../sections/Milestones";
 import TechSheet from "../sections/TechSheet";
-import Location from "../sections/Location";
+
 import Gallery from "../sections/Gallery";
 import DataRoom from "../sections/DataRoom";
 import Contact from "../sections/Contact";
 import Overview from "../sections/Overview";
 import AtAGlance from "../sections/AtAGlance";
 import ProjectOverview from "../sections/ProjectOverview";
+import TechnicalSheetSection from "../sections/TechnicalSheetSection";
+import LocationLeaflet from "../sections/LocationLeaflet";
+
+
 
 export default function Home() {
   return (
@@ -24,6 +28,8 @@ export default function Home() {
         <ExecutiveSummary />
         <AtAGlance/>
         <ProjectOverview />
+        < TechnicalSheetSection />
+        <LocationLeaflet />
 
       </main>
       <Footer />
