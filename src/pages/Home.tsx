@@ -14,7 +14,7 @@ import TechnicalSheetSection from "../sections/TechnicalSheetSection";
 import LocationLeaflet from "../sections/LocationLeaflet";
 import GeologyAndMining from "../sections/GeologyAndMining";
 import ClosurePlan from "../sections/ClosurePlan";
-
+import ContactSection from "../sections/ContactSection";
 
 
 export default function Home() {
@@ -31,6 +31,7 @@ export default function Home() {
         <LocationLeaflet />
         <GeologyAndMining />
         < ClosurePlan />
+        < ContactSection />
 
       </main>
       <Footer />
