@@ -10,6 +10,7 @@ import Location from "../sections/Location";
 import Gallery from "../sections/Gallery";
 import DataRoom from "../sections/DataRoom";
 import Contact from "../sections/Contact";
+import Overview from "../sections/Overview";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <Overview />
         <ExecutiveSummary />
         <InvestorOpportunity />
         <Milestones />
