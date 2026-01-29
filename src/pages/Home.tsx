@@ -3,10 +3,6 @@ import Footer from "../components/Footer";
 
 import Hero from "../sections/Hero";
 import ExecutiveSummary from "../sections/ExecutiveSummary";
-
-import Gallery from "../sections/Gallery";
-import DataRoom from "../sections/DataRoom";
-import Contact from "../sections/Contact";
 import Overview from "../sections/Overview";
 import AtAGlance from "../sections/AtAGlance";
 import ProjectOverview from "../sections/ProjectOverview";
