@@ -3,9 +3,6 @@ import Footer from "../components/Footer";
 
 import Hero from "../sections/Hero";
 import ExecutiveSummary from "../sections/ExecutiveSummary";
-import InvestorOpportunity from "../sections/InvestorOpportunity";
-import Milestones from "../sections/Milestones";
-import TechSheet from "../sections/TechSheet";
 
 import Gallery from "../sections/Gallery";
 import DataRoom from "../sections/DataRoom";
@@ -15,6 +12,8 @@ import AtAGlance from "../sections/AtAGlance";
 import ProjectOverview from "../sections/ProjectOverview";
 import TechnicalSheetSection from "../sections/TechnicalSheetSection";
 import LocationLeaflet from "../sections/LocationLeaflet";
+import GeologyAndMining from "../sections/GeologyAndMining";
+import ClosurePlan from "../sections/ClosurePlan";
 
 
 
@@ -30,6 +29,8 @@ export default function Home() {
         <ProjectOverview />
         < TechnicalSheetSection />
         <LocationLeaflet />
+        <GeologyAndMining />
+        < ClosurePlan />
 
       </main>
       <Footer />
