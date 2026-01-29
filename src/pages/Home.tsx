@@ -11,6 +11,8 @@ import Gallery from "../sections/Gallery";
 import DataRoom from "../sections/DataRoom";
 import Contact from "../sections/Contact";
 import Overview from "../sections/Overview";
+import AtAGlance from "../sections/AtAGlance";
+import ProjectOverview from "../sections/ProjectOverview";
 
 export default function Home() {
   return (
@@ -20,13 +22,9 @@ export default function Home() {
         <Hero />
         <Overview />
         <ExecutiveSummary />
-        <InvestorOpportunity />
-        <Milestones />
-        <TechSheet />
-        <Location />
-        <Gallery />
-        <DataRoom />
-        <Contact />
+        <AtAGlance/>
+        <ProjectOverview />
+
       </main>
       <Footer />
     </div>
