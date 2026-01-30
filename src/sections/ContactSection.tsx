@@ -1,16 +1,19 @@
-import React from "react";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 18 },
-  show: (i = 0) => ({
+  show: (i: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: "easeOut", delay: 0.08 * i },
+    transition: {
+      duration: 0.55,
+      ease: [0.2, 0.8, 0.2, 1], // ✅ antes: "easeOut" (string)
+      delay: 0.08 * i,
+    },
   }),
 };
 
-const stagger = {
+const stagger: Variants = {
   hidden: {},
   show: {
     transition: { staggerChildren: 0.08, delayChildren: 0.05 },

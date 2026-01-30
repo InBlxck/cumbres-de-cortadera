@@ -7,19 +7,10 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // ✅ Animación de entrada (sale desde arriba)
-  const [mounted, setMounted] = useState(false);
-
   const ids = useMemo(
     () => NAV.map((n) => n.href).filter((h) => h.startsWith("#")),
     []
   );
-
-  useEffect(() => {
-    // pequeña espera para que se note el “drop-in”
-    const t = window.setTimeout(() => setMounted(true), 50);
-    return () => window.clearTimeout(t);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -78,9 +69,11 @@ export default function Navbar() {
 
   const wrapperBg = scrolled
     ? "bg-white shadow-[0_12px_30px_rgba(2,6,23,0.10)]"
-    : "bg-bg/60 backdrop-blur-xl";
+    : "bg-transparent backdrop-blur-xl";
 
-  const divider = scrolled ? "bg-slate-200" : "bg-white/15";
+  // ✅ FIX: separar el divider para fondo (bg-*) y para borde (border-*)
+  const dividerLine = scrolled ? "bg-slate-200" : "bg-white/15";
+  const dividerBorder = scrolled ? "border-slate-200" : "border-white/15";
 
   const NavContainer = ({ children }: { children: React.ReactNode }) => (
     <div className="w-full px-6 lg:px-10">{children}</div>
@@ -88,14 +81,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full">
-      {/* ✅ Animación de entrada: desde arriba + fade */}
-      <div
-        className={[
-          "w-full transition-all duration-500 ease-out",
-          mounted ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0",
-          wrapperBg,
-        ].join(" ")}
-      >
+      <div className={`w-full transition-all duration-300 ${wrapperBg}`}>
         {/* Línea superior */}
         <div
           className={`h-[2px] w-full transition-all duration-300 ${
@@ -133,7 +119,7 @@ export default function Navbar() {
         <NavContainer>
           <div
             className={`h-[2px] rounded-full transition-all duration-300 ${
-              scrolled ? divider : "bg-white/80"
+              scrolled ? dividerLine : "bg-white/80"
             }`}
           />
         </NavContainer>
@@ -168,12 +154,11 @@ export default function Navbar() {
                       "group relative px-2 py-2 rounded-md",
                       "text-[16px] md:text-[17px] font-semibold tracking-wide",
                       "transition-all duration-300",
-                      "hover:-translate-y-[1px]", // micro-lift
+                      "hover:-translate-y-[1px]",
                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C58B1E]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
                       linkBase,
                     ].join(" ")}
                   >
-                    {/* Fondo sutil al hover */}
                     <span
                       className={[
                         "absolute inset-0 rounded-md transition duration-300",
@@ -181,14 +166,12 @@ export default function Navbar() {
                       ].join(" ")}
                     />
 
-                    {/* Glow dorado sutil */}
                     <span className="pointer-events-none absolute -inset-2 rounded-xl opacity-0 blur-xl transition duration-300 group-hover:opacity-100">
                       <span className="absolute inset-0 rounded-xl bg-[#C58B1E]/10" />
                     </span>
 
                     <span className="relative z-10">{l.label}</span>
 
-                    {/* Línea dorada izquierda→derecha */}
                     <span
                       className={[
                         "absolute left-2 right-2 -bottom-[7px]",
@@ -242,7 +225,7 @@ export default function Navbar() {
 
         {/* Mobile dropdown */}
         {mobileOpen && (
-          <div className={`lg:hidden border-t ${divider}`}>
+          <div className={`lg:hidden border-t ${dividerBorder}`}>
             <NavContainer>
               <div className="py-4">
                 <div className="flex flex-col gap-1">

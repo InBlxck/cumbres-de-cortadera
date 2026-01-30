@@ -1,19 +1,38 @@
 @import "tailwindcss";
 
 /* Reset duro */
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   min-height: 100%;
   margin: 0;
   padding: 0;
 }
 
-html, body {
+html,
+body {
   padding-top: 0 !important;
 }
 
 :root {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    sans-serif;
+
+  /* ✅ Altura efectiva del navbar fixed (offset global) */
+  --nav-h: 140px; /* mobile */
+}
+
+@media (min-width: 640px) {
+  :root {
+    --nav-h: 150px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --nav-h: 160px;
+  }
 }
 
 /* Fondo consistente desde html */
@@ -31,39 +50,47 @@ body {
 }
 
 ::selection {
-  background: rgba(31,167,166,0.22);
+  background: rgba(31, 167, 166, 0.22);
 }
 
-:root {
-  --nav-h: 0px;
+/* ✅ Para que al ir a #anclas no queden tapadas por el nav */
+[id] {
+  scroll-margin-top: var(--nav-h);
 }
 
-
-.leaflet-container { z-index: 0; }
-.leaflet-control, .leaflet-pane { z-index: 1; }
+/* Leaflet (si usas mapa) */
+.leaflet-container {
+  z-index: 0;
+}
+.leaflet-control,
+.leaflet-pane {
+  z-index: 1;
+}
 
 .leaflet-control-zoom {
-  border: 1px solid rgba(255,255,255,.12) !important;
-  box-shadow: 0 18px 60px rgba(0,0,0,.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45) !important;
   border-radius: 14px !important;
   overflow: hidden;
 }
-.leaflet-control-zoom a{
-  background: rgba(15, 23, 42, .72) !important;
-  color: rgba(255,255,255,.92) !important;
-  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+.leaflet-control-zoom a {
+  background: rgba(15, 23, 42, 0.72) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
-.leaflet-control-zoom a:hover{ background: rgba(15, 23, 42, .88) !important; }
+.leaflet-control-zoom a:hover {
+  background: rgba(15, 23, 42, 0.88) !important;
+}
 
-.leaflet-control-attribution{
-  background: rgba(0,0,0,.35) !important;
-  color: rgba(255,255,255,.75) !important;
-  border: 1px solid rgba(255,255,255,.10) !important;
+.leaflet-control-attribution {
+  background: rgba(0, 0, 0, 0.35) !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 10px !important;
   padding: 4px 8px !important;
   margin: 10px !important;
   backdrop-filter: blur(10px);
 }
-.leaflet-control-attribution a{ color: rgba(255,255,255,.9) !important; }
-
-
+.leaflet-control-attribution a {
+  color: rgba(255, 255, 255, 0.9) !important;
+}

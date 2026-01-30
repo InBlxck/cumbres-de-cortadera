@@ -5,11 +5,13 @@ type ContainerProps = PropsWithChildren<{
 }>;
 
 export default function Container({ children, variant = "default" }: ContainerProps) {
+  // ✅ Un solo "ancho" para todo el sitio: consistente en desktop y mobile
+  const base = "mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10";
+
   if (variant === "nav") {
-    // Más parecido a sitios corporativos: ancho grande + padding consistente
-    return <div className="w-full px-6 lg:px-10">{children}</div>;
+    // ✅ Nav usa el mismo max-width que el resto (evita saltos)
+    return <div className={base}>{children}</div>;
   }
 
-  // Contenedor normal para el resto del sitio
-  return <div className="mx-auto w-full max-w-6xl px-5">{children}</div>;
+  return <div className={base}>{children}</div>;
 }

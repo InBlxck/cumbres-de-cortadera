@@ -113,7 +113,7 @@ export default function GeologyAndMining() {
             </p>
 
             <ul className="mt-5 space-y-3">
-              {mineralizacionBullets.map((b, idx) => (
+              {mineralizacionBullets.map((b) => (
                 <li key={b} className="flex items-start gap-3 text-sm text-slate-700">
                   <span className="mt-1.5 h-2 w-2 rounded-full bg-brand" />
                   <span>{b}</span>

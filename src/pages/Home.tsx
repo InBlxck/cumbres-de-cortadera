@@ -12,24 +12,25 @@ import GeologyAndMining from "../sections/GeologyAndMining";
 import ClosurePlan from "../sections/ClosurePlan";
 import ContactSection from "../sections/ContactSection";
 
-
 export default function Home() {
   return (
     <div className="min-h-screen bg-bg text-white">
       <Navbar />
-      <main>
+
+      {/* ✅ Offset global para el navbar fixed */}
+      <main className="pt-[var(--nav-h)]">
         <Hero />
         <Overview />
         <ExecutiveSummary />
-        <AtAGlance/>
+        <AtAGlance />
         <ProjectOverview />
-        < TechnicalSheetSection />
+        <TechnicalSheetSection />
         <LocationLeaflet />
         <GeologyAndMining />
-        < ClosurePlan />
-        < ContactSection />
-
+        <ClosurePlan />
+        <ContactSection />
       </main>
+
       <Footer />
     </div>
   );
