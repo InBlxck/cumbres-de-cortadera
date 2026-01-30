@@ -3,7 +3,8 @@ import logo from "../assets/logo/mineria-del-sur.png";
 import { NAV } from "../lib/constants";
 
 export default function Navbar() {
-  const [active, setActive] = useState<string>("#resumen");
+  // ✅ No marcamos ninguna pestaña hasta que el usuario haga scroll
+  const [active, setActive] = useState<string>("");
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -12,6 +13,7 @@ export default function Navbar() {
     []
   );
 
+  // Solo estilo del navbar (fondo/sombra)
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     onScroll();
@@ -19,6 +21,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Cierra el menú móvil al cambiar tamaño a desktop
   useEffect(() => {
     const onResize = () => {
       if (window.innerWidth >= 1024) setMobileOpen(false);
@@ -32,28 +35,57 @@ export default function Navbar() {
     setMobileOpen(false);
   };
 
+  // ✅ Active link según sección actual (robusto, no se queda pegado)
   useEffect(() => {
     const sections = ids
       .map((h) => document.querySelector(h))
-      .filter(Boolean) as Element[];
+      .filter(Boolean) as HTMLElement[];
 
     if (!sections.length) return;
 
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort(
-            (a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0)
-          )[0];
+    const getCurrentActive = () => {
+      const y = window.scrollY;
 
-        if (visible?.target?.id) setActive(`#${visible.target.id}`);
-      },
-      { rootMargin: "-40% 0px -50% 0px", threshold: [0.15, 0.3] }
-    );
+      // Arriba del todo: no marcamos nada
+      if (y < 10) return "";
 
-    sections.forEach((s) => obs.observe(s));
-    return () => obs.disconnect();
+      // Línea guía: aprox. altura del navbar + un poco
+      const offset = 120;
+
+      // Elegimos la última sección cuyo top ya pasó la línea guía
+      let current = "";
+      for (const s of sections) {
+        const top = s.getBoundingClientRect().top;
+        if (top - offset <= 0) current = `#${s.id}`;
+      }
+
+      // Si aún ninguna pasó el offset (casos raros), tomamos la más cercana
+      if (!current) {
+        const nearest = [...sections].sort(
+          (a, b) =>
+            Math.abs(a.getBoundingClientRect().top - offset) -
+            Math.abs(b.getBoundingClientRect().top - offset)
+        )[0];
+        current = nearest ? `#${nearest.id}` : "";
+      }
+
+      return current;
+    };
+
+    const onTick = () => {
+      setActive(getCurrentActive());
+    };
+
+    // Inicial
+    onTick();
+
+    window.addEventListener("scroll", onTick, { passive: true });
+    window.addEventListener("resize", onTick, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onTick);
+      window.removeEventListener("resize", onTick);
+    };
   }, [ids]);
 
   const topText = scrolled ? "text-slate-600" : "text-white/90";
@@ -71,7 +103,6 @@ export default function Navbar() {
     ? "bg-white shadow-[0_12px_30px_rgba(2,6,23,0.10)]"
     : "bg-transparent backdrop-blur-xl";
 
-  // ✅ FIX: separar el divider para fondo (bg-*) y para borde (border-*)
   const dividerLine = scrolled ? "bg-slate-200" : "bg-white/15";
   const dividerBorder = scrolled ? "border-slate-200" : "border-white/15";
 
