@@ -138,6 +138,27 @@ export default function Hero() {
     <div className="w-full px-4 sm:px-6 lg:px-10">{children}</div>
   );
 
+  // ✅ helper: obtener altura del navbar desde CSS var (--nav-h) o fallback
+  const getNavOffset = () => {
+    const v = getComputedStyle(document.documentElement)
+      .getPropertyValue("--nav-h")
+      .trim(); // ej: "72px"
+    const px = parseFloat(v.replace("px", ""));
+    // un poco extra para que no quede pegado
+    return Number.isFinite(px) && px > 0 ? px + 12 : 96;
+  };
+
+  const scrollToHash = (hash: string) => {
+    const id = hash.replace("#", "");
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const offset = getNavOffset();
+    const y = el.getBoundingClientRect().top + window.scrollY - offset;
+
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
   useEffect(() => {
     const raf = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(raf);
@@ -159,7 +180,6 @@ export default function Hero() {
   }, []);
 
   return (
-    // ✅ FIX: sube el hero detrás del navbar, pero SIN padding-top que empuje la imagen
     <section id="top" className="relative -mt-[var(--nav-h)]">
       <style>{`
         @keyframes heroFadeUp {
@@ -200,27 +220,20 @@ export default function Hero() {
             decoding="async"
           />
 
-          {/* overlays */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/45" />
 
-          {/* content */}
           <div className="absolute inset-0">
             <Wide>
               <div className="flex h-full items-center sm:items-start">
-               <div
+                <div
                   className={`
                     hero-text ${mounted ? "is-mounted" : ""}
                     w-full max-w-3xl
-
-                    /* ✅ DESPLAZAMIENTO HORIZONTAL (desktop) */
                     lg:ml-[6%] xl:ml-[10%]
-
-                    /* ✅ AJUSTE VERTICAL */
-                    pt-[calc(var(--nav-h)+5rem)]        /* ⬅️ mobile: baja más el texto */
-                    sm:pt-[calc(var(--nav-h)+3.5rem)]   /* igual que ahora */
-                    lg:pt-[calc(var(--nav-h)+4.5rem)]   /* desktop intacto */
-
+                    pt-[calc(var(--nav-h)+5rem)]
+                    sm:pt-[calc(var(--nav-h)+3.5rem)]
+                    lg:pt-[calc(var(--nav-h)+4.5rem)]
                     pb-10 sm:pb-0
                   `}
                 >
@@ -277,6 +290,10 @@ export default function Hero() {
                   >
                     <a
                       href="#contacto"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToHash("#contacto");
+                      }}
                       className="
                         group inline-flex
                         w-full sm:w-auto
@@ -323,27 +340,35 @@ export default function Hero() {
                 {
                   icon: "doc",
                   title: "Resumen del proyecto",
-                  text: "Presentación breve del activo y próximos pasos.",
+                  text: "Descripción general del proyecto, estado actual y lineamientos de desarrollo.",
+                  href: "#resumen",
                 },
                 {
                   icon: "globe",
                   title: "Ubicación & acceso",
-                  text: "Región, entorno e infraestructura relevante.",
+                  text: "Localización, accesos terrestres e infraestructura existente.",
+                  href: "#ubicacion",
                 },
                 {
                   icon: "handshake",
                   title: "Oportunidad de inversión",
-                  text: "Estructura, modalidad e hitos.",
+                  text: "Requerimientos de capital, modalidad de participación y etapas del proyecto.",
+                  href: "#investors",
                 },
                 {
                   icon: "people",
-                  title: "Contacto & Data Room",
-                  text: "Acceso a información y documentos.",
+                  title: "Contacto",
+                  text: "Canal de contacto y acceso a documentación técnica del proyecto.",
+                  href: "#contacto",
                 },
               ].map((item, i) => (
                 <a
-                  key={i}
-                  href="#resumen"
+                  key={item.href}
+                  href={item.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToHash(item.href);
+                  }}
                   data-tile
                   style={{ animationDelay: `${120 + i * 90}ms` }}
                   className="

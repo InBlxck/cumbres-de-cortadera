@@ -48,7 +48,7 @@ function makeBadgeIcon(label: string, bg: string) {
   });
 }
 
-// ===== Zoom con rueda solo con Ctrl/Meta (evita que el mapa "secuestré" el scroll) =====
+// ===== Zoom con rueda solo con Ctrl/Meta =====
 function WheelZoomGuard() {
   const map = useMap();
   const [hint, setHint] = useState(false);
@@ -91,7 +91,7 @@ function WheelZoomGuard() {
   );
 }
 
-// ===== Card inferior (más pro + íconos blancos) =====
+// ===== Card inferior (mismo alto para todas) =====
 function StatCard({
   title,
   value,
@@ -104,7 +104,14 @@ function StatCard({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.085] p-6 shadow-[0_22px_70px_rgba(0,0,0,0.55)] transition-all duration-300 hover:-translate-y-[2px] hover:bg-white/[0.11]">
+    <div
+      className={[
+        "relative h-full overflow-hidden rounded-2xl border border-white/15",
+        "bg-white/[0.085] p-6 shadow-[0_22px_70px_rgba(0,0,0,0.55)]",
+        "transition-all duration-300 hover:-translate-y-[2px] hover:bg-white/[0.11]",
+        "flex flex-col",
+      ].join(" ")}
+    >
       <div className="absolute left-0 top-0 h-full w-[3px] rounded-l-2xl bg-brand/80" />
       <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-brand/15 blur-3xl" />
 
@@ -113,18 +120,24 @@ function StatCard({
           {icon}
         </div>
 
-        <div>
+        <div className="min-w-0">
           <p className="text-[11px] uppercase tracking-[0.18em] text-white/60">
             {title}
           </p>
 
-          <p className="mt-1 text-base font-semibold text-white">{value}</p>
+          {/* mismos cortes/alturas visuales */}
+          <p className="mt-1 text-base font-semibold text-white leading-snug line-clamp-2">
+            {value}
+          </p>
 
-          <p className="mt-2 text-sm leading-relaxed text-white/65">
+          <p className="mt-2 text-sm leading-relaxed text-white/65 line-clamp-3">
             {subtitle}
           </p>
         </div>
       </div>
+
+      {/* empuja “aire” hacia abajo si faltara texto, manteniendo altura consistente */}
+      <div className="mt-auto pt-2" />
     </div>
   );
 }
@@ -188,7 +201,6 @@ export default function LocationLeaflet() {
   }, []);
 
   const statVariant = (i: number) => {
-    // 4 distintas: left, up, pop, right
     if (i === 0) return "loc-left";
     if (i === 1) return "loc-up";
     if (i === 2) return "loc-pop";
@@ -196,7 +208,7 @@ export default function LocationLeaflet() {
   };
 
   return (
-    <section id="ubicacion" className="relative overflow-hidden bg-[#192338] py-20">
+    <section id="ubicacion" className="relative overflow-hidden bg-[#192338] py-16 sm:py-20">
       {/* CSS local animaciones */}
       <style>{`
         @keyframes locUp {
@@ -215,9 +227,7 @@ export default function LocationLeaflet() {
           from { opacity: 0; transform: translateY(14px) scale(0.985); }
           to   { opacity: 1; transform: translateY(0) scale(1); }
         }
-
         .loc-wrap [data-anim] { opacity: 0; }
-
         .loc-wrap.is-visible .loc-up[data-anim] {
           animation: locUp 720ms cubic-bezier(.2,.8,.2,1) both;
         }
@@ -247,7 +257,7 @@ export default function LocationLeaflet() {
         {/* Header */}
         <div
           data-anim
-          className="text-center mb-10 loc-up"
+          className="text-center mb-8 sm:mb-10 loc-up"
           style={{ animationDelay: "80ms" }}
         >
           <p className="text-xs uppercase tracking-[0.2em] text-brand">Ubicación</p>
@@ -261,12 +271,8 @@ export default function LocationLeaflet() {
         </div>
 
         {/* Barra coherente */}
-        <div
-          data-anim
-          className="mb-6 loc-up"
-          style={{ animationDelay: "180ms" }}
-        >
-          <div className="mx-auto max-w-[980px] rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-4 backdrop-blur-md">
+        <div data-anim className="mb-5 sm:mb-6 loc-up" style={{ animationDelay: "180ms" }}>
+          <div className="mx-auto max-w-[980px] rounded-2xl border border-white/10 bg-white/[0.06] px-4 sm:px-5 py-4 backdrop-blur-md">
             <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-white">
               <div className="inline-flex items-center gap-2">
                 <span className="grid h-6 w-6 place-items-center rounded-full bg-green-500 text-[12px] font-bold text-white">
@@ -307,7 +313,7 @@ export default function LocationLeaflet() {
           </p>
         </div>
 
-        {/* Mapa */}
+        {/* Mapa (más pequeño + responsive) */}
         <div
           data-anim
           className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] shadow-[0_40px_120px_rgba(0,0,0,0.70)] loc-pop"
@@ -316,11 +322,12 @@ export default function LocationLeaflet() {
           <div className="pointer-events-none absolute inset-0 ring-1 ring-white/10" />
 
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/35 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/45 to-transparent" />
+            <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/35 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/45 to-transparent" />
           </div>
 
-          <div className="h-[500px] w-full">
+          {/* antes 500px fijo -> ahora responsive */}
+          <div className="w-full h-[320px] sm:h-[380px] lg:h-[440px]">
             <MapContainer
               center={center}
               zoom={8}
@@ -360,8 +367,8 @@ export default function LocationLeaflet() {
           )}
         </div>
 
-        {/* Cards */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Cards (mismo alto + responsive) */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
           {[
             {
               title: "Ruta de acceso",
@@ -415,7 +422,7 @@ export default function LocationLeaflet() {
             <div
               key={card.title}
               data-anim
-              className={statVariant(i)}
+              className={`${statVariant(i)} h-full`}
               style={{ animationDelay: `${420 + i * 90}ms` }}
             >
               <StatCard {...card} />

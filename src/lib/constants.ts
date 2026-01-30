@@ -2,7 +2,7 @@ export const SITE = {
   company: "Minería del Sur",
   project: "Cumbres de Cortadera",
   tagline:
-    "Plataforma informativa para presentar el proyecto, su potencial y la oportunidad de inversión, con foco en transparencia técnica.",
+    "Explotación de óxidos y sulfuros de cobre con presencia de oro y plata, ubicada en el sector Cortadera, Provincia de Copiapó, Región de Atacama, Chile.",
   ctaPrimary: "Solicitar reunión",
   ctaSecondary: "Ver Data Room",
 };
