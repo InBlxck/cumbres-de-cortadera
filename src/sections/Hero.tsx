@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { SITE } from "../lib/constants";
 import heroImg from "../assets/photos/hero.jpg";
 
@@ -129,19 +130,70 @@ function TileIcon({
 }
 
 export default function Hero() {
+  const [mounted, setMounted] = useState(false);
+  const [tilesVisible, setTilesVisible] = useState(false);
+
   const Wide = ({ children }: { children: React.ReactNode }) => (
     <div className="w-full px-4 sm:px-6 lg:px-10">{children}</div>
   );
 
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  useEffect(() => {
+    const el = document.getElementById("hero-tiles");
+    if (!el) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) setTilesVisible(true);
+      },
+      { threshold: 0.2 }
+    );
+
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <section id="top" className="relative pt-[var(--nav-h)]">
+      <style>{`
+        @keyframes heroFadeUp {
+          from { opacity: 0; transform: translateY(14px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes heroZoom {
+          from { transform: scale(1); }
+          to   { transform: scale(1.03); }
+        }
+
+        .hero-text [data-anim] { opacity: 0; transform: translateY(14px); }
+        .hero-text.is-mounted [data-anim] {
+          animation: heroFadeUp 720ms cubic-bezier(.2,.8,.2,1) both;
+        }
+
+        .hero-img { transform: scale(1); }
+        .hero-img.is-mounted {
+          animation: heroZoom 1800ms cubic-bezier(.2,.8,.2,1) both;
+        }
+
+        .hero-tiles [data-tile] { opacity: 0; transform: translateY(14px); }
+        .hero-tiles.is-visible [data-tile] {
+          animation: heroFadeUp 720ms cubic-bezier(.2,.8,.2,1) both;
+        }
+      `}</style>
+
       <div className="relative w-full overflow-visible">
         <div className="relative w-full overflow-hidden">
           <div className="relative h-[75vh] sm:h-[85vh] lg:h-[90vh] min-h-[520px] sm:min-h-[560px] w-full">
             <img
               src={heroImg}
               alt={SITE.project}
-              className="h-full w-full object-cover"
+              className={`h-full w-full object-cover hero-img ${
+                mounted ? "is-mounted" : ""
+              }`}
               loading="eager"
               decoding="async"
             />
@@ -152,36 +204,82 @@ export default function Hero() {
             <div className="absolute inset-0">
               <Wide>
                 <div className="flex h-full items-start pt-[calc(var(--nav-h)+12rem)] sm:pt-[calc(var(--nav-h)+18rem)] lg:pt-[calc(var(--nav-h)+14rem)]">
-                  <div className="max-w-[640px] pl-6 sm:pl-10 lg:pl-28">
-                    <div className="text-xs md:text-sm font-semibold tracking-widest uppercase text-white/70">
+                  <div
+                    className={`max-w-[640px] pl-6 sm:pl-10 lg:pl-28 hero-text ${
+                      mounted ? "is-mounted" : ""
+                    }`}
+                  >
+                    <div
+                      data-anim
+                      style={{ animationDelay: "80ms" }}
+                      className="text-xs md:text-sm font-semibold tracking-widest uppercase text-white/70"
+                    >
                       Proyecto minero · Chile
                     </div>
 
-                    <h1 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-white">
+                    <h1
+                      data-anim
+                      style={{ animationDelay: "160ms" }}
+                      className="mt-4 text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-white"
+                    >
                       {SITE.project}
                     </h1>
 
-                    <p className="mt-4 text-sm sm:text-base md:text-lg text-white/85 leading-relaxed">
+                    <p
+                      data-anim
+                      style={{ animationDelay: "240ms" }}
+                      className="mt-4 text-sm sm:text-base md:text-lg text-white/85 leading-relaxed"
+                    >
                       {SITE.tagline}
                     </p>
 
-                    <p className="mt-5 text-xs sm:text-sm md:text-base text-white/70">
+                    <p
+                      data-anim
+                      style={{ animationDelay: "320ms" }}
+                      className="mt-5 text-xs sm:text-sm md:text-base text-white/70"
+                    >
                       Desarrollo responsable, trazabilidad y un camino claro hacia inversión.
                     </p>
 
-                    <div className="mt-8 flex flex-wrap gap-3 sm:gap-4">
+                    {/* ✅ SOLO 1 BOTÓN + HOVER PRO */}
+                    <div
+                      data-anim
+                      style={{ animationDelay: "420ms" }}
+                      className="mt-8 flex flex-wrap gap-3 sm:gap-4"
+                    >
                       <a
                         href="#contacto"
-                        className="inline-flex items-center justify-center rounded-xl bg-white px-5 sm:px-6 py-3 font-semibold text-black/90 hover:bg-white/90 transition"
+                        className="
+                          group
+                          inline-flex
+                          items-center
+                          justify-center
+                          gap-2
+                          rounded-xl
+                          bg-white
+                          px-6
+                          py-3
+                          font-semibold
+                          text-black/90
+                          transition
+                          duration-300
+                          ease-out
+                          hover:scale-[1.04]
+                          hover:shadow-[0_12px_30px_rgba(0,0,0,0.18)]
+                          active:scale-[0.98]
+                        "
                       >
                         Solicitar reunión
-                      </a>
-
-                      <a
-                        href="#documentos"
-                        className="inline-flex items-center justify-center rounded-xl border border-white/45 px-5 sm:px-6 py-3 font-semibold text-white hover:bg-white/10 transition"
-                      >
-                        Ver Data Room
+                        <span
+                          className="
+                            transition-transform
+                            duration-300
+                            ease-out
+                            group-hover:translate-x-1
+                          "
+                        >
+                          <ArrowRight />
+                        </span>
                       </a>
                     </div>
                   </div>
@@ -197,7 +295,12 @@ export default function Hero() {
 
           <Wide>
             <div className="relative">
-              <div className="absolute left-1/2 top-0 z-20 w-full max-w-[1350px] -translate-x-1/2 -translate-y-[18%] sm:-translate-y-[22%] lg:-translate-y-[25%] rounded-3xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.14)] overflow-hidden">
+              <div
+                id="hero-tiles"
+                className={`absolute left-1/2 top-0 z-20 w-full max-w-[1350px] -translate-x-1/2 -translate-y-[18%] sm:-translate-y-[22%] lg:-translate-y-[25%] rounded-3xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.14)] overflow-hidden hero-tiles ${
+                  tilesVisible ? "is-visible" : ""
+                }`}
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
                   {[
                     {
@@ -224,6 +327,8 @@ export default function Hero() {
                     <a
                       key={i}
                       href="#resumen"
+                      data-tile
+                      style={{ animationDelay: `${120 + i * 90}ms` }}
                       className="
                         group
                         bg-white
@@ -254,7 +359,6 @@ export default function Hero() {
             </div>
           </Wide>
 
-          {/* ✅ MENOS “colchón” antes del Overview */}
           <div className="bg-white h-6 sm:h-8 lg:h-10" />
         </div>
       </div>

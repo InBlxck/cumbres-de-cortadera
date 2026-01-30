@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function ClosurePlan() {
   const items = [
@@ -24,21 +24,67 @@ export default function ClosurePlan() {
     },
   ];
 
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = document.getElementById("plan-cierre");
+    if (!el) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.14 }
+    );
+
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section id="cierre" className="relative overflow-hidden bg-[#192338] py-20">
+    <section
+      id="plan-cierre"
+      className="relative overflow-hidden bg-[#192338] py-20"
+    >
+      {/* Animaciones (CSS local) */}
+      <style>{`
+        @keyframes cUp { from {opacity:0; transform: translateY(16px);} to {opacity:1; transform: translateY(0);} }
+        @keyframes cLeft { from {opacity:0; transform: translateX(-16px);} to {opacity:1; transform: translateX(0);} }
+        @keyframes cRight { from {opacity:0; transform: translateX(16px);} to {opacity:1; transform: translateX(0);} }
+        @keyframes cPop { from {opacity:0; transform: translateY(14px) scale(.985);} to {opacity:1; transform: translateY(0) scale(1);} }
+
+        .c-wrap [data-anim] { opacity: 0; }
+        .c-wrap.is-visible .c-up[data-anim] { animation: cUp 760ms cubic-bezier(.2,.8,.2,1) both; }
+        .c-wrap.is-visible .c-left[data-anim] { animation: cLeft 760ms cubic-bezier(.2,.8,.2,1) both; }
+        .c-wrap.is-visible .c-right[data-anim] { animation: cRight 760ms cubic-bezier(.2,.8,.2,1) both; }
+        .c-wrap.is-visible .c-pop[data-anim] { animation: cPop 820ms cubic-bezier(.2,.8,.2,1) both; }
+
+        @media (prefers-reduced-motion: reduce) {
+          .c-wrap [data-anim] { opacity: 1 !important; animation: none !important; transform: none !important; }
+        }
+      `}</style>
+
       {/* Fondo suave */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-24 left-1/2 h-80 w-[980px] -translate-x-1/2 rounded-full bg-white/[0.06] blur-3xl" />
         <div className="absolute -bottom-40 left-1/2 h-96 w-[980px] -translate-x-1/2 rounded-full bg-brand/[0.12] blur-3xl" />
       </div>
 
-      <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
-        {/* Layout más bonito: 2 columnas (texto + cards) */}
+      <div
+        className={[
+          "relative mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 c-wrap",
+          visible ? "is-visible" : "",
+        ].join(" ")}
+      >
+        {/* Layout 2 columnas */}
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-start">
           {/* Columna texto */}
-          <div className="lg:col-span-5">
+          <div
+            data-anim
+            className="lg:col-span-5 c-left"
+            style={{ animationDelay: "80ms" }}
+          >
             <div className="inline-flex items-center gap-2 rounded-full bg-[#C58B1E] px-4 py-2 shadow-sm">
-
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white">
                 Responsabilidad ambiental
               </p>
@@ -57,7 +103,6 @@ export default function ClosurePlan() {
               reglamento.
             </p>
 
-            {/* Mini bloque extra (se ve “pro” y ordena la lectura) */}
             <div className="mt-7 rounded-2xl border border-white/10 bg-white/[0.06] p-5 backdrop-blur">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
                 Enfoque
@@ -70,9 +115,12 @@ export default function ClosurePlan() {
           </div>
 
           {/* Columna cards */}
-          <div className="lg:col-span-7">
+          <div
+            data-anim
+            className="lg:col-span-7 c-right"
+            style={{ animationDelay: "140ms" }}
+          >
             <div className="relative">
-              {/* Borde/halo suave alrededor del grid */}
               <div className="pointer-events-none absolute -inset-3 sm:-inset-4 rounded-[28px] bg-white/[0.04]" />
 
               <div className="relative grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -80,9 +128,22 @@ export default function ClosurePlan() {
                   const Icon = it.icon;
                   const step = String(idx + 1).padStart(2, "0");
 
+                  // ✅ Variación: no todas iguales
+                  const animClass =
+                    idx === 0
+                      ? "c-pop"
+                      : idx === 1
+                      ? "c-up"
+                      : idx === 2
+                      ? "c-left"
+                      : "c-right";
+
+                  const delay = 220 + idx * 90;
+
                   return (
                     <article
                       key={it.title}
+                      data-anim
                       className={[
                         "group relative overflow-hidden rounded-2xl",
                         "border border-white/10 bg-white/[0.06] backdrop-blur",
@@ -90,7 +151,9 @@ export default function ClosurePlan() {
                         "shadow-[0_18px_55px_rgba(0,0,0,0.35)]",
                         "transition-all duration-300",
                         "hover:-translate-y-[2px] hover:bg-white/[0.08]",
+                        animClass,
                       ].join(" ")}
+                      style={{ animationDelay: `${delay}ms` }}
                     >
                       {/* Glow sutil */}
                       <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
@@ -105,7 +168,7 @@ export default function ClosurePlan() {
                           </span>
                         </div>
 
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-black/35 text-[#C58B1E] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.10)]">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-black/35 text-[#C58B1E] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.10)] transition-transform duration-300 group-hover:scale-[1.06]">
                           <Icon className="h-6 w-6" />
                         </div>
                       </div>
@@ -118,7 +181,6 @@ export default function ClosurePlan() {
                         {it.desc}
                       </p>
 
-                      {/* Linea inferior que aparece en hover */}
                       <div className="relative mt-5 h-[2px] w-12 rounded-full bg-brand/70 opacity-60 transition group-hover:opacity-100" />
                     </article>
                   );
@@ -126,8 +188,11 @@ export default function ClosurePlan() {
               </div>
             </div>
 
-            {/* Nota */}
-            <div className="mt-8 text-center text-sm text-white/55">
+            <div
+              data-anim
+              className="mt-8 text-center text-sm text-white/55 c-up"
+              style={{ animationDelay: "680ms" }}
+            >
               Coordinación y documentación asociada disponible vía Data Room bajo
               solicitud.
             </div>

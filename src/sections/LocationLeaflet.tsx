@@ -105,17 +105,13 @@ function StatCard({
 }) {
   return (
     <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.085] p-6 shadow-[0_22px_70px_rgba(0,0,0,0.55)] transition-all duration-300 hover:-translate-y-[2px] hover:bg-white/[0.11]">
-      {/* Accent lateral */}
       <div className="absolute left-0 top-0 h-full w-[3px] rounded-l-2xl bg-brand/80" />
-
-      {/* Glow suave */}
       <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-brand/15 blur-3xl" />
 
       <div className="relative flex items-start gap-4">
-        {/* Ícono BLANCO, siempre visible */}
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-black/45 text-[#C58B1E] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)]">
-        {icon}
-      </div>
+          {icon}
+        </div>
 
         <div>
           <p className="text-[11px] uppercase tracking-[0.18em] text-white/60">
@@ -124,7 +120,9 @@ function StatCard({
 
           <p className="mt-1 text-base font-semibold text-white">{value}</p>
 
-          <p className="mt-2 text-sm leading-relaxed text-white/65">{subtitle}</p>
+          <p className="mt-2 text-sm leading-relaxed text-white/65">
+            {subtitle}
+          </p>
         </div>
       </div>
     </div>
@@ -146,6 +144,9 @@ export default function LocationLeaflet() {
 
   const [route, setRoute] = useState<LatLng[]>([]);
   const [routeError, setRouteError] = useState<string | null>(null);
+
+  // Animación sección
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -170,17 +171,85 @@ export default function LocationLeaflet() {
     };
   }, [A[0], A[1], B[0], B[1]]);
 
+  // IntersectionObserver para animación
+  useEffect(() => {
+    const el = document.getElementById("ubicacion-anim");
+    if (!el) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.14 }
+    );
+
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  const statVariant = (i: number) => {
+    // 4 distintas: left, up, pop, right
+    if (i === 0) return "loc-left";
+    if (i === 1) return "loc-up";
+    if (i === 2) return "loc-pop";
+    return "loc-right";
+  };
+
   return (
     <section id="ubicacion" className="relative overflow-hidden bg-[#192338] py-20">
+      {/* CSS local animaciones */}
+      <style>{`
+        @keyframes locUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes locLeft {
+          from { opacity: 0; transform: translateX(-16px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes locRight {
+          from { opacity: 0; transform: translateX(16px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes locPop {
+          from { opacity: 0; transform: translateY(14px) scale(0.985); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .loc-wrap [data-anim] { opacity: 0; }
+
+        .loc-wrap.is-visible .loc-up[data-anim] {
+          animation: locUp 720ms cubic-bezier(.2,.8,.2,1) both;
+        }
+        .loc-wrap.is-visible .loc-left[data-anim] {
+          animation: locLeft 720ms cubic-bezier(.2,.8,.2,1) both;
+        }
+        .loc-wrap.is-visible .loc-right[data-anim] {
+          animation: locRight 720ms cubic-bezier(.2,.8,.2,1) both;
+        }
+        .loc-wrap.is-visible .loc-pop[data-anim] {
+          animation: locPop 760ms cubic-bezier(.2,.8,.2,1) both;
+        }
+      `}</style>
+
       {/* Fondo suave */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-24 left-1/2 h-80 w-[900px] -translate-x-1/2 rounded-full bg-white/[0.06] blur-3xl" />
         <div className="absolute -bottom-32 left-1/2 h-96 w-[900px] -translate-x-1/2 rounded-full bg-brand/[0.10] blur-3xl" />
       </div>
 
-      <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
+      <div
+        id="ubicacion-anim"
+        className={`relative mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 loc-wrap ${
+          visible ? "is-visible" : ""
+        }`}
+      >
         {/* Header */}
-        <div className="text-center mb-10">
+        <div
+          data-anim
+          className="text-center mb-10 loc-up"
+          style={{ animationDelay: "80ms" }}
+        >
           <p className="text-xs uppercase tracking-[0.2em] text-brand">Ubicación</p>
           <h2 className="mt-3 text-3xl sm:text-4xl font-semibold text-white">
             Localización y Acceso
@@ -191,8 +260,12 @@ export default function LocationLeaflet() {
           </p>
         </div>
 
-        {/* Barra coherente: Inicio → Ruta → Tiempo → Destino */}
-        <div className="mb-6">
+        {/* Barra coherente */}
+        <div
+          data-anim
+          className="mb-6 loc-up"
+          style={{ animationDelay: "180ms" }}
+        >
           <div className="mx-auto max-w-[980px] rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-4 backdrop-blur-md">
             <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-white">
               <div className="inline-flex items-center gap-2">
@@ -235,7 +308,11 @@ export default function LocationLeaflet() {
         </div>
 
         {/* Mapa */}
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] shadow-[0_40px_120px_rgba(0,0,0,0.70)]">
+        <div
+          data-anim
+          className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] shadow-[0_40px_120px_rgba(0,0,0,0.70)] loc-pop"
+          style={{ animationDelay: "280ms" }}
+        >
           <div className="pointer-events-none absolute inset-0 ring-1 ring-white/10" />
 
           <div className="pointer-events-none absolute inset-0">
@@ -259,7 +336,6 @@ export default function LocationLeaflet() {
               <Marker position={A} icon={aIcon} />
               <Marker position={B} icon={bIcon} />
 
-              {/* Ruta (driving) con doble trazo */}
               {route.length > 1 && (
                 <>
                   <Polyline
@@ -284,62 +360,74 @@ export default function LocationLeaflet() {
           )}
         </div>
 
-        {/* Cards (ahora resaltan + íconos blancos) */}
+        {/* Cards */}
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard
-            title="Ruta de acceso"
-            value="Ruta internacional desde Copiapó"
-            subtitle="Acceso principal hacia el sector Cortadera."
-            icon={
-              <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none">
-                <path d="M4 12h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                <path d="M14 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-              </svg>
-            }
-          />
-
-          <StatCard
-            title="Tiempo estimado"
-            value="~1h 30min"
-            subtitle="Referencia operacional para traslados y logística."
-            icon={
-              <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
-                <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            }
-          />
-
-          <StatCard
-            title="Altitud"
-            value="2.800 – 2.900 m s. n. m."
-            subtitle="Condición relevante para planificación en terreno."
-            icon={
-              <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none">
-                <path d="M3 20h18" stroke="currentColor" strokeWidth="2" />
-                <path d="M5 20l6-10 3 5 4-7 2 12" stroke="currentColor" strokeWidth="2" />
-              </svg>
-            }
-          />
-
-          <StatCard
-            title="Coordenadas"
-            value="UTM WGS84 / PSAD56"
-            subtitle="Registradas y documentadas en informes técnicos."
-            icon={
-              <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none">
-                <path
-                  d="M12 22s7-4.5 7-12a7 7 0 1 0-14 0c0 7.5 7 12 7 12Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                />
-                <circle cx="12" cy="10" r="2" stroke="currentColor" strokeWidth="2" />
-              </svg>
-            }
-          />
+          {[
+            {
+              title: "Ruta de acceso",
+              value: "Ruta internacional desde Copiapó",
+              subtitle: "Acceso principal hacia el sector Cortadera.",
+              icon: (
+                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none">
+                  <path d="M4 12h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M14 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+                </svg>
+              ),
+            },
+            {
+              title: "Tiempo estimado",
+              value: "~1h 30min",
+              subtitle: "Referencia operacional para traslados y logística.",
+              icon: (
+                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none">
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+                  <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              ),
+            },
+            {
+              title: "Altitud",
+              value: "2.800 – 2.900 m s. n. m.",
+              subtitle: "Condición relevante para planificación en terreno.",
+              icon: (
+                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none">
+                  <path d="M3 20h18" stroke="currentColor" strokeWidth="2" />
+                  <path d="M5 20l6-10 3 5 4-7 2 12" stroke="currentColor" strokeWidth="2" />
+                </svg>
+              ),
+            },
+            {
+              title: "Coordenadas",
+              value: "UTM WGS84 / PSAD56",
+              subtitle: "Registradas y documentadas en informes técnicos.",
+              icon: (
+                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none">
+                  <path
+                    d="M12 22s7-4.5 7-12a7 7 0 1 0-14 0c0 7.5 7 12 7 12Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                  <circle cx="12" cy="10" r="2" stroke="currentColor" strokeWidth="2" />
+                </svg>
+              ),
+            },
+          ].map((card, i) => (
+            <div
+              key={card.title}
+              data-anim
+              className={statVariant(i)}
+              style={{ animationDelay: `${420 + i * 90}ms` }}
+            >
+              <StatCard {...card} />
+            </div>
+          ))}
         </div>
 
-        <div className="mt-6 text-center text-sm text-white/55">
+        <div
+          data-anim
+          className="mt-6 text-center text-sm text-white/55 loc-up"
+          style={{ animationDelay: "820ms" }}
+        >
           <span className="font-semibold text-white/75">Nota:</span> Coordenadas y referencias documentadas
           en informes técnicos. Data Room disponible bajo solicitud.
         </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 function TileIcon({
   variant,
@@ -11,7 +11,6 @@ function TileIcon({
   const stroke = "currentColor";
 
   if (variant === "publicFunds") {
-    // Documento/briefcase simple (fondos/programas)
     return (
       <svg viewBox="0 0 24 24" fill="none" className={common}>
         <path
@@ -32,7 +31,6 @@ function TileIcon({
   }
 
   if (variant === "profitShare") {
-    // Símbolo $ minimal
     return (
       <svg viewBox="0 0 24 24" fill="none" className={common}>
         <path
@@ -52,7 +50,6 @@ function TileIcon({
     );
   }
 
-  // operationalLease: tarjeta/contrato simple
   return (
     <svg viewBox="0 0 24 24" fill="none" className={common}>
       <path
@@ -82,17 +79,26 @@ function Card({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="group relative rounded-2xl bg-[#E2E2E2] border border-black/10 px-8 py-9 text-center shadow-[0_18px_60px_rgba(0,0,0,0.35)] overflow-hidden">
+    <div
+      className="
+        group relative rounded-2xl bg-[#E2E2E2] border border-black/10
+        px-8 py-9 text-center
+        shadow-[0_18px_60px_rgba(0,0,0,0.35)]
+        overflow-hidden
+        transition-transform duration-300 ease-out
+        hover:-translate-y-[3px]
+        hover:shadow-[0_26px_70px_rgba(0,0,0,0.38)]
+      "
+    >
       {/* glow hover */}
       <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300">
         <div className="absolute -top-24 -right-24 h-56 w-56 rounded-full bg-brand/20 blur-3xl" />
       </div>
 
       <div className="relative">
-        {/* Contenedor del icono (más sobrio) */}
-        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#CCCCCF]">
-        {icon}
-      </div>
+        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#CCCCCF] transition-transform duration-300 ease-out group-hover:scale-[1.06]">
+          {icon}
+        </div>
 
         <h3 className="text-lg font-semibold text-black">{title}</h3>
         <p className="mt-3 text-sm text-black/70 leading-relaxed">{desc}</p>
@@ -102,17 +108,75 @@ function Card({
 }
 
 export default function ProjectOverview() {
+  const [visible, setVisible] = useState(false);
+
+  // Animación al entrar en viewport
+  useEffect(() => {
+    const el = document.getElementById("project-overview-anim");
+    if (!el) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.18 }
+    );
+
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <section id="investors" className="relative overflow-hidden bg-[#192338]">
+      {/* CSS local para animaciones */}
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeLeft {
+          from { opacity: 0; transform: translateX(-18px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeRight {
+          from { opacity: 0; transform: translateX(18px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes popUp {
+          from { opacity: 0; transform: translateY(18px) scale(0.98); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .po-wrap [data-anim] { opacity: 0; }
+
+        .po-wrap.is-visible .po-up[data-anim] {
+          animation: fadeUp 720ms cubic-bezier(.2,.8,.2,1) both;
+        }
+        .po-wrap.is-visible .po-left[data-anim] {
+          animation: fadeLeft 720ms cubic-bezier(.2,.8,.2,1) both;
+        }
+        .po-wrap.is-visible .po-right[data-anim] {
+          animation: fadeRight 720ms cubic-bezier(.2,.8,.2,1) both;
+        }
+        .po-wrap.is-visible .po-pop[data-anim] {
+          animation: popUp 760ms cubic-bezier(.2,.8,.2,1) both;
+        }
+      `}</style>
+
       {/* fondo */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-32 left-1/2 h-96 w-[900px] -translate-x-1/2 rounded-full bg-white/[0.05] blur-3xl" />
         <div className="absolute -bottom-32 left-1/2 h-96 w-[900px] -translate-x-1/2 rounded-full bg-brand/[0.10] blur-3xl" />
       </div>
 
-      <div className="relative mx-auto max-w-[1300px] px-4 sm:px-6 lg:px-8 py-20">
+      <div
+        id="project-overview-anim"
+        className={`relative mx-auto max-w-[1300px] px-4 sm:px-6 lg:px-8 py-20 po-wrap ${
+          visible ? "is-visible" : ""
+        }`}
+      >
         {/* Header */}
-        <div className="text-center">
+        <div data-anim className="text-center po-up" style={{ animationDelay: "90ms" }}>
           <h2 className="text-2xl sm:text-3xl font-semibold text-white">
             Oportunidad para Inversionistas
           </h2>
@@ -125,28 +189,34 @@ export default function ProjectOverview() {
 
         {/* Cards */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          <Card
-            title="Fondos Públicos"
-            desc="Programas de ENAMI, GORE y Corfo orientados a pequeña minería."
-            icon={<TileIcon variant="publicFunds" className="text-[#C58B1E]" />}
-          />
+          {/* 1: entra izquierda */}
+          <div data-anim className="po-left" style={{ animationDelay: "220ms" }}>
+            <Card
+              title="Fondos Públicos"
+              desc="Programas de ENAMI, GORE y Corfo orientados a pequeña minería."
+              icon={<TileIcon variant="publicFunds" className="text-[#C58B1E]" />}
+            />
+          </div>
 
-          <Card
-            title="Profit-Share"
-            desc="Acuerdos de participación en utilidades con aportantes privados."
-            icon={<TileIcon variant="profitShare" className="text-[#C58B1E]" />}
-          />
+          {/* 2: entra “pop” (destacada) */}
+          <div data-anim className="po-pop" style={{ animationDelay: "340ms" }}>
+            <Card
+              title="Profit-Share"
+              desc="Acuerdos de participación en utilidades con aportantes privados."
+              icon={<TileIcon variant="profitShare" className="text-[#C58B1E]" />}
+            />
+          </div>
 
-          <Card
-            title="Arriendo Operacional"
-            desc="Contratos por metro avanzado o tonelada para reducir CAPEX inicial."
-            icon={
-              <TileIcon
-                variant="operationalLease"
-                className="text-[#C58B1E]"
-              />
-            }
-          />
+          {/* 3: entra derecha */}
+          <div data-anim className="po-right" style={{ animationDelay: "460ms" }}>
+            <Card
+              title="Arriendo Operacional"
+              desc="Contratos por metro avanzado o tonelada para reducir CAPEX inicial."
+              icon={
+                <TileIcon variant="operationalLease" className="text-[#C58B1E]" />
+              }
+            />
+          </div>
         </div>
       </div>
     </section>

@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export default function GeologyAndMining() {
   const mineralizacionBullets = [
     "Óxidos de cobre (crisocola, atacamita)",
@@ -32,11 +34,55 @@ export default function GeologyAndMining() {
     { title: "Fortificación", desc: "Labores de seguridad" },
   ];
 
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = document.getElementById("geologia-operacion");
+    if (!el) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.14 }
+    );
+
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section id="geologia" className="bg-white py-20">
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
+    <section id="geologia-operacion" className="bg-white py-20">
+      {/* Animaciones (CSS local) */}
+      <style>{`
+        @keyframes gUp { from {opacity:0; transform: translateY(16px);} to {opacity:1; transform: translateY(0);} }
+        @keyframes gLeft { from {opacity:0; transform: translateX(-16px);} to {opacity:1; transform: translateX(0);} }
+        @keyframes gRight { from {opacity:0; transform: translateX(16px);} to {opacity:1; transform: translateX(0);} }
+        @keyframes gPop { from {opacity:0; transform: translateY(14px) scale(0.985);} to {opacity:1; transform: translateY(0) scale(1);} }
+
+        .g-wrap [data-anim] { opacity: 0; }
+        .g-wrap.is-visible .g-up[data-anim] { animation: gUp 720ms cubic-bezier(.2,.8,.2,1) both; }
+        .g-wrap.is-visible .g-left[data-anim] { animation: gLeft 720ms cubic-bezier(.2,.8,.2,1) both; }
+        .g-wrap.is-visible .g-right[data-anim] { animation: gRight 720ms cubic-bezier(.2,.8,.2,1) both; }
+        .g-wrap.is-visible .g-pop[data-anim] { animation: gPop 760ms cubic-bezier(.2,.8,.2,1) both; }
+
+        @media (prefers-reduced-motion: reduce) {
+          .g-wrap [data-anim] { opacity: 1 !important; animation: none !important; transform: none !important; }
+        }
+      `}</style>
+
+      <div
+        className={[
+          "mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 g-wrap",
+          visible ? "is-visible" : "",
+        ].join(" ")}
+      >
         {/* Header */}
-        <div className="mb-12 text-center">
+        <div
+          data-anim
+          className="mb-12 text-center g-up"
+          style={{ animationDelay: "80ms" }}
+        >
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">
             Aspectos técnicos
           </p>
@@ -49,10 +95,14 @@ export default function GeologyAndMining() {
           </p>
         </div>
 
-        {/* Bloque principal: 2 columnas balanceadas */}
+        {/* Bloque principal: 2 columnas */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {/* Mineralización (SE MANTIENE) */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_18px_55px_rgba(15,23,42,0.08)]">
+          {/* Mineralización */}
+          <div
+            data-anim
+            className="g-left rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_18px_55px_rgba(15,23,42,0.08)]"
+            style={{ animationDelay: "180ms" }}
+          >
             <SectionTitle title="Mineralización" />
 
             <p className="mt-4 text-sm leading-relaxed text-slate-600">
@@ -63,7 +113,7 @@ export default function GeologyAndMining() {
             </p>
 
             <ul className="mt-5 space-y-3">
-              {mineralizacionBullets.map((b) => (
+              {mineralizacionBullets.map((b, idx) => (
                 <li key={b} className="flex items-start gap-3 text-sm text-slate-700">
                   <span className="mt-1.5 h-2 w-2 rounded-full bg-brand" />
                   <span>{b}</span>
@@ -81,8 +131,12 @@ export default function GeologyAndMining() {
             </div>
           </div>
 
-          {/* Parámetros (SE MANTIENE) */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_18px_55px_rgba(15,23,42,0.08)]">
+          {/* Parámetros */}
+          <div
+            data-anim
+            className="g-right rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_18px_55px_rgba(15,23,42,0.08)]"
+            style={{ animationDelay: "240ms" }}
+          >
             <div className="flex items-end justify-between gap-4">
               <SectionTitle title="Parámetros operacionales" />
               <span className="text-xs font-semibold text-slate-500">Actualizado</span>
@@ -114,8 +168,12 @@ export default function GeologyAndMining() {
           </div>
         </div>
 
-        {/* Métodos de explotación (AJUSTADO: menos vacío + tags visibles) */}
-        <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
+        {/* Métodos */}
+        <div
+          data-anim
+          className="mt-10 g-pop rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_18px_55px_rgba(15,23,42,0.06)]"
+          style={{ animationDelay: "320ms" }}
+        >
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <SectionTitle title="Métodos de explotación" />
             <p className="text-sm text-slate-600">
@@ -124,10 +182,12 @@ export default function GeologyAndMining() {
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
-            {metodos.map((m) => (
+            {metodos.map((m, i) => (
               <div
                 key={m.title}
-                className="rounded-2xl border border-slate-200 bg-white p-6 transition hover:shadow-[0_14px_40px_rgba(15,23,42,0.08)]"
+                data-anim
+                className="g-up rounded-2xl border border-slate-200 bg-white p-6 transition hover:shadow-[0_14px_40px_rgba(15,23,42,0.08)]"
+                style={{ animationDelay: `${420 + i * 90}ms` }}
               >
                 <div className="flex items-start justify-between gap-4">
                   <span
@@ -165,8 +225,12 @@ export default function GeologyAndMining() {
           </div>
         </div>
 
-        {/* Operaciones unitarias (AJUSTADO: íconos visibles) */}
-        <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
+        {/* Operaciones unitarias */}
+        <div
+          data-anim
+          className="mt-10 g-pop rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_18px_55px_rgba(15,23,42,0.06)]"
+          style={{ animationDelay: "360ms" }}
+        >
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <SectionTitle title="Operaciones unitarias" />
             <p className="text-sm text-slate-600">
@@ -175,10 +239,12 @@ export default function GeologyAndMining() {
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {operaciones.map((o) => (
+            {operaciones.map((o, i) => (
               <div
                 key={o.title}
-                className="group rounded-2xl border border-slate-200 bg-slate-50 p-6 transition hover:bg-white hover:shadow-[0_14px_40px_rgba(15,23,42,0.08)]"
+                data-anim
+                className="g-up group rounded-2xl border border-slate-200 bg-slate-50 p-6 transition hover:bg-white hover:shadow-[0_14px_40px_rgba(15,23,42,0.08)]"
+                style={{ animationDelay: `${520 + i * 90}ms` }}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -201,7 +267,11 @@ export default function GeologyAndMining() {
         </div>
 
         {/* Nota final */}
-        <div className="mt-8 text-center text-sm text-slate-500">
+        <div
+          data-anim
+          className="mt-8 text-center text-sm text-slate-500 g-up"
+          style={{ animationDelay: "900ms" }}
+        >
           <span className="font-semibold text-slate-700">Nota:</span> Coordinación y respaldo documental vía Data Room bajo solicitud.
         </div>
       </div>
@@ -225,7 +295,9 @@ function SectionTitle({ title }: { title: string }) {
 function MiniPill({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{label}</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+        {label}
+      </p>
       <p className="mt-1 text-sm font-semibold text-slate-900">{value}</p>
     </div>
   );

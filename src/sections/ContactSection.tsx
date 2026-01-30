@@ -1,4 +1,21 @@
 import React from "react";
+import { motion } from "framer-motion";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 18 },
+  show: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: "easeOut", delay: 0.08 * i },
+  }),
+};
+
+const stagger = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
+  },
+};
 
 export default function ContactSection() {
   const primary = [
@@ -36,28 +53,58 @@ export default function ContactSection() {
     <section id="contacto" className="bg-white py-24">
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-14 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.35 }}
+          className="mb-14 text-center"
+        >
+          <motion.p
+            variants={fadeUp}
+            custom={0}
+            className="text-xs font-semibold uppercase tracking-[0.22em] text-brand"
+          >
             INVERSIÓN
-          </p>
+          </motion.p>
 
-          <h2 className="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">
+          <motion.h2
+            variants={fadeUp}
+            custom={1}
+            className="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900"
+          >
             Contacto
-          </h2>
+          </motion.h2>
 
-          <div className="mx-auto mt-4 h-[3px] w-14 rounded-full bg-brand" />
+          <motion.div
+            variants={fadeUp}
+            custom={2}
+            className="mx-auto mt-4 h-[3px] w-14 rounded-full bg-brand"
+          />
 
-          <p className="mx-auto mt-6 max-w-3xl text-sm sm:text-base text-slate-600">
+          <motion.p
+            variants={fadeUp}
+            custom={3}
+            className="mx-auto mt-6 max-w-3xl text-sm sm:text-base text-slate-600"
+          >
             Para coordinar reuniones, recibir propuestas de inversión o solicitar
             versiones completas de los informes técnicos.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        {/* Layout pro: Info (izq) + Acciones (der) */}
+        {/* Layout */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          {/* IZQ: Tarjeta grande con datos */}
-          <div className="lg:col-span-5">
-            <div
+          {/* IZQ */}
+          <motion.div
+            className="lg:col-span-5"
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.25 }}
+          >
+            <motion.div
+              whileHover={{ y: -3 }}
+              transition={{ type: "spring", stiffness: 260, damping: 18 }}
               className={[
                 "rounded-3xl bg-[#192338] p-8",
                 "shadow-[0_22px_60px_rgba(0,0,0,0.22)] ring-1 ring-white/5",
@@ -81,12 +128,22 @@ export default function ContactSection() {
                 </div>
               </div>
 
-              <div className="mt-7 space-y-4">
-                {primary.map((item) => {
+              <motion.div
+                variants={stagger}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.3 }}
+                className="mt-7 space-y-4"
+              >
+                {primary.map((item, idx) => {
                   const Icon = item.icon;
                   return (
-                    <div
+                    <motion.div
                       key={item.label}
+                      variants={fadeUp}
+                      custom={idx}
+                      whileHover={{ scale: 1.01 }}
+                      transition={{ type: "spring", stiffness: 260, damping: 18 }}
                       className={[
                         "flex items-start gap-4 rounded-2xl",
                         "border border-white/10 bg-white/[0.06] p-5",
@@ -109,10 +166,10 @@ export default function ContactSection() {
                           {item.value}
                         </p>
                       </div>
-                    </div>
+                    </motion.div>
                   );
                 })}
-              </div>
+              </motion.div>
 
               <div className="mt-7 h-px w-full bg-white/10" />
 
@@ -120,23 +177,32 @@ export default function ContactSection() {
                 Si requiere acceso a documentación técnica, podemos habilitar el
                 Data Room bajo solicitud.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          {/* DER: Acciones (en columna: Oferta debajo de Reunión) */}
-          <div className="lg:col-span-7 flex flex-col justify-center">
+          {/* DER */}
+          <motion.div
+            className="lg:col-span-7 flex flex-col justify-center"
+            variants={stagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.25 }}
+          >
             <div className="grid grid-cols-1 gap-6">
-              {actions.map((item) => {
+              {actions.map((item, idx) => {
                 const Icon = item.icon;
                 return (
-                  <div
+                  <motion.div
                     key={item.title}
+                    variants={fadeUp}
+                    custom={idx}
+                    whileHover={{ y: -4 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 18 }}
                     className={[
                       "group relative overflow-hidden rounded-3xl",
                       "bg-[#192338] p-8",
                       "shadow-[0_22px_60px_rgba(0,0,0,0.22)] ring-1 ring-white/5",
                       "border border-white/10",
-                      "transition hover:-translate-y-[2px] hover:shadow-[0_28px_75px_rgba(0,0,0,0.30)]",
                     ].join(" ")}
                   >
                     {/* Glow sutil */}
@@ -169,18 +235,29 @@ export default function ContactSection() {
                         {item.desc}
                       </p>
 
-                      <div className="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black/90 transition hover:bg-white/90">
+                      <motion.div
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 18 }}
+                        className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black/90 hover:bg-white/90"
+                      >
                         Continuar <span className="text-black/70">→</span>
-                      </div>
+                      </motion.div>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
-          </div>
+          </motion.div>
 
-          {/* TIP abajo centrado (ocupa todo el ancho) */}
-          <div className="lg:col-span-12">
+          {/* TIP */}
+          <motion.div
+            className="lg:col-span-12"
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             <div className="mt-2 flex justify-center">
               <div className="w-full max-w-[760px] rounded-2xl border border-[#C58B1E]/30 bg-[#FFF6E6] px-6 py-4 text-center">
                 <p className="text-sm text-[#7A5A12] leading-relaxed">
@@ -192,7 +269,7 @@ export default function ContactSection() {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
