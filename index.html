@@ -18,5 +18,16 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Netlify Forms: detección estática (NO visible) -->
+      <form name="solicitudes" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+        <input type="hidden" name="form-name" value="solicitudes" />
+        <input name="bot-field" />
+        <input name="tipo" />
+        <input name="nombre" />
+        <input name="email" />
+        <input name="telefono" />
+        <textarea name="mensaje"></textarea>
+      </form>
   </body>
 </html>
