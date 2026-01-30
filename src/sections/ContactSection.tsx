@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion, type Variants } from "framer-motion";
 
 const fadeUp: Variants = {
@@ -7,7 +8,7 @@ const fadeUp: Variants = {
     y: 0,
     transition: {
       duration: 0.55,
-      ease: [0.2, 0.8, 0.2, 1], // ✅ antes: "easeOut" (string)
+      ease: [0.2, 0.8, 0.2, 1],
       delay: 0.08 * i,
     },
   }),
@@ -21,6 +22,46 @@ const stagger: Variants = {
 };
 
 export default function ContactSection() {
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">(
+    "idle"
+  );
+
+  // ✅ Modal (form oculto)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [leadType, setLeadType] = useState<"reunion" | "oferta">("reunion");
+
+  function openLead(type: "reunion" | "oferta") {
+    setLeadType(type);
+    setStatus("idle");
+    setModalOpen(true);
+  }
+
+  function closeLead() {
+    setModalOpen(false);
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("sending");
+
+    try {
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+
+      const res = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString(),
+      });
+
+      if (!res.ok) throw new Error("Netlify form submit failed");
+      setStatus("success");
+      form.reset();
+    } catch {
+      setStatus("error");
+    }
+  }
+
   const primary = [
     {
       label: "Teléfono",
@@ -41,11 +82,13 @@ export default function ContactSection() {
 
   const actions = [
     {
+      key: "reunion" as const,
       title: "Solicitar Reunión",
       desc: "Agende una reunión con nuestro equipo técnico",
       icon: CalendarIcon,
     },
     {
+      key: "oferta" as const,
       title: "Presentar Oferta",
       desc: "Envíe su propuesta de inversión",
       icon: DollarIcon,
@@ -238,14 +281,17 @@ export default function ContactSection() {
                         {item.desc}
                       </p>
 
-                      <motion.div
+                      {/* ✅ Ahora abre el formulario oculto */}
+                      <motion.button
+                        type="button"
+                        onClick={() => openLead(item.key)}
                         whileHover={{ scale: 1.04 }}
                         whileTap={{ scale: 0.98 }}
                         transition={{ type: "spring", stiffness: 300, damping: 18 }}
                         className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black/90 hover:bg-white/90"
                       >
                         Continuar <span className="text-black/70">→</span>
-                      </motion.div>
+                      </motion.button>
                     </div>
                   </motion.div>
                 );
@@ -275,6 +321,124 @@ export default function ContactSection() {
           </motion.div>
         </div>
       </div>
+
+      {/* ================= MODAL FORM (Netlify) ================= */}
+      {modalOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center"
+          role="dialog"
+          aria-modal="true"
+        >
+          {/* overlay */}
+          <div className="absolute inset-0 bg-black/70" onClick={closeLead} />
+
+          {/* modal box */}
+          <div className="relative w-[92vw] max-w-[720px] rounded-3xl bg-[#192338] p-6 sm:p-8 border border-white/10 shadow-[0_22px_60px_rgba(0,0,0,0.35)] ring-1 ring-white/5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/65">
+                  {leadType === "reunion" ? "Solicitud" : "Oferta"}
+                </p>
+                <h3 className="mt-2 text-xl font-semibold text-white">
+                  {leadType === "reunion"
+                    ? "Solicitar reunión"
+                    : "Presentar oferta de inversión"}
+                </h3>
+                <p className="mt-2 text-sm text-white/65">
+                  Completa el formulario y se enviará por correo vía Netlify Forms.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={closeLead}
+                className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white/80 hover:bg-white/15"
+                aria-label="Cerrar"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form
+              name="solicitudes"
+              method="POST"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
+              onSubmit={handleSubmit}
+              className="mt-6 grid gap-4"
+            >
+              <input type="hidden" name="form-name" value="solicitudes" />
+
+              {/* Honeypot anti-spam */}
+              <p className="hidden">
+                <label>
+                  No llenar: <input name="bot-field" />
+                </label>
+              </p>
+
+              {/* Para que te llegue indicando el tipo */}
+              <input type="hidden" name="tipo" value={leadType} />
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <input
+                  name="nombre"
+                  required
+                  placeholder="Nombre"
+                  className="h-12 rounded-2xl px-4 border border-white/10 bg-white/[0.06] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="Correo"
+                  className="h-12 rounded-2xl px-4 border border-white/10 bg-white/[0.06] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
+                />
+              </div>
+
+              <input
+                name="telefono"
+                placeholder="Teléfono (opcional)"
+                className="h-12 rounded-2xl px-4 border border-white/10 bg-white/[0.06] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+
+              <textarea
+                name="mensaje"
+                required
+                placeholder={
+                  leadType === "reunion"
+                    ? "Cuéntanos disponibilidad, tema y objetivo de la reunión..."
+                    : "Cuéntanos tu oferta, ticket, plazos y estructura sugerida..."
+                }
+                className="min-h-[140px] rounded-2xl p-4 border border-white/10 bg-white/[0.06] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+
+              <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-black/90 hover:bg-white/90 disabled:opacity-60"
+                >
+                  {status === "sending" ? "Enviando..." : "Enviar"}
+                  <span className="text-black/70">→</span>
+                </button>
+
+                {status === "success" && (
+                  <p className="text-sm text-emerald-300">✅ Enviado correctamente.</p>
+                )}
+                {status === "error" && (
+                  <p className="text-sm text-red-300">
+                    ❌ Error al enviar. Intenta nuevamente.
+                  </p>
+                )}
+              </div>
+
+              <p className="mt-1 text-xs text-white/50">
+                Tip: en Netlify → Forms → Notifications puedes activar el envío a tu correo.
+              </p>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
