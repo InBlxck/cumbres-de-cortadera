@@ -22,17 +22,12 @@ const stagger: Variants = {
 };
 
 export default function ContactSection() {
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">(
-    "idle"
-  );
-
   // ✅ Modal (form oculto)
   const [modalOpen, setModalOpen] = useState(false);
   const [leadType, setLeadType] = useState<"reunion" | "oferta">("reunion");
 
   function openLead(type: "reunion" | "oferta") {
     setLeadType(type);
-    setStatus("idle");
     setModalOpen(true);
   }
 
@@ -40,27 +35,8 @@ export default function ContactSection() {
     setModalOpen(false);
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setStatus("sending");
-
-    try {
-      const form = e.currentTarget;
-      const formData = new FormData(form);
-
-      const res = await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData as any).toString(),
-      });
-
-      if (!res.ok) throw new Error("Netlify form submit failed");
-      setStatus("success");
-      form.reset();
-    } catch {
-      setStatus("error");
-    }
-  }
+  // ✅ IMPORTANTE: Para que Netlify registre submissions en SPAs,
+  // dejamos que el form haga POST nativo (sin fetch / sin preventDefault).
 
   const primary = [
     {
@@ -281,7 +257,6 @@ export default function ContactSection() {
                         {item.desc}
                       </p>
 
-                      {/* ✅ Ahora abre el formulario oculto */}
                       <motion.button
                         type="button"
                         onClick={() => openLead(item.key)}
@@ -329,10 +304,8 @@ export default function ContactSection() {
           role="dialog"
           aria-modal="true"
         >
-          {/* overlay */}
           <div className="absolute inset-0 bg-black/70" onClick={closeLead} />
 
-          {/* modal box */}
           <div className="relative w-[92vw] max-w-[720px] rounded-3xl bg-[#192338] p-6 sm:p-8 border border-white/10 shadow-[0_22px_60px_rgba(0,0,0,0.35)] ring-1 ring-white/5">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -364,19 +337,17 @@ export default function ContactSection() {
               method="POST"
               data-netlify="true"
               data-netlify-honeypot="bot-field"
-              onSubmit={handleSubmit}
+              action="/"
               className="mt-6 grid gap-4"
             >
               <input type="hidden" name="form-name" value="solicitudes" />
 
-              {/* Honeypot anti-spam */}
               <p className="hidden">
                 <label>
                   No llenar: <input name="bot-field" />
                 </label>
               </p>
 
-              {/* Para que te llegue indicando el tipo */}
               <input type="hidden" name="tipo" value={leadType} />
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -415,21 +386,11 @@ export default function ContactSection() {
               <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <button
                   type="submit"
-                  disabled={status === "sending"}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-black/90 hover:bg-white/90 disabled:opacity-60"
                 >
-                  {status === "sending" ? "Enviando..." : "Enviar"}
+                  Enviar
                   <span className="text-black/70">→</span>
                 </button>
-
-                {status === "success" && (
-                  <p className="text-sm text-emerald-300">✅ Enviado correctamente.</p>
-                )}
-                {status === "error" && (
-                  <p className="text-sm text-red-300">
-                    ❌ Error al enviar. Intenta nuevamente.
-                  </p>
-                )}
               </div>
 
               <p className="mt-1 text-xs text-white/50">
