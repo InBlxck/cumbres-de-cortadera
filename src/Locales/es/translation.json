@@ -1,0 +1,20 @@
+{
+  "top": {
+    "contact": "Contacto",
+    "language": "Idioma",
+    "openMenu": "Abrir menú"
+  },
+  "lang": {
+    "es": "Español",
+    "en": "English"
+  },
+  "nav": {
+    "resumen": "Resumen",
+    "cifras": "Cifras",
+    "inversion": "Inversión",
+    "fichaTecnica": "Ficha Técnica",
+    "ubicacion": "Ubicación",
+    "geologiaOperacion": "Geología y Operación",
+    "planCierre": "Plan de Cierre"
+  }
+}

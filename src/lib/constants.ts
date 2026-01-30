@@ -8,14 +8,14 @@ export const SITE = {
 };
 
 export const NAV = [
-  { label: "Resumen", href: "#resumen" },
-  { label: "Cifras", href: "#cifras" },
-  { label: "Inversión", href: "#investors" },
-  { label: "Ficha Técnica", href: "#ficha-tecnica" },
-  { label: "Ubicación", href: "#ubicacion" },
-  { label: "Geología y Operación", href: "#geologia-operacion" },
-  { label: "Plan de Cierre", href: "#plan-cierre" },
-];
+  { labelKey: "nav.resumen", href: "#resumen" },
+  { labelKey: "nav.cifras", href: "#cifras" },
+  { labelKey: "nav.inversion", href: "#investors" },
+  { labelKey: "nav.fichaTecnica", href: "#ficha-tecnica" },
+  { labelKey: "nav.ubicacion", href: "#ubicacion" },
+  { labelKey: "nav.geologiaOperacion", href: "#geologia-operacion" },
+  { labelKey: "nav.planCierre", href: "#plan-cierre" },
+] as const;
 
 export const STATS = [
   { k: "Estado", v: "En desarrollo" },
@@ -117,8 +117,18 @@ export const DATA_ROOM = [
   {
     category: "Legal y societario",
     items: [
-      { name: "Constitución / poderes", type: "PDF", href: "#", status: "Próximamente" },
-      { name: "Título / derechos / pertenencias", type: "PDF", href: "#", status: "Próximamente" },
+      {
+        name: "Constitución / poderes",
+        type: "PDF",
+        href: "#",
+        status: "Próximamente",
+      },
+      {
+        name: "Título / derechos / pertenencias",
+        type: "PDF",
+        href: "#",
+        status: "Próximamente",
+      },
     ],
   },
   {

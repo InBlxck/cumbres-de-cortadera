@@ -1,0 +1,20 @@
+{
+  "top": {
+    "contact": "Contact",
+    "language": "Language",
+    "openMenu": "Open menu"
+  },
+  "lang": {
+    "es": "Español",
+    "en": "English"
+  },
+  "nav": {
+    "resumen": "Summary",
+    "cifras": "Key figures",
+    "inversion": "Investment",
+    "fichaTecnica": "Technical sheet",
+    "ubicacion": "Location",
+    "geologiaOperacion": "Geology & Operations",
+    "planCierre": "Closure plan"
+  }
+}
