@@ -94,3 +94,8 @@ body {
 .leaflet-control-attribution a {
   color: rgba(255, 255, 255, 0.9) !important;
 }
+
+/* Compensa navbar fixed al navegar por anclas (#...) */
+section[id] {
+  scroll-margin-top: 120px; /* ajusta 100–140 según tu navbar */
+}
