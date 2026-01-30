@@ -49,7 +49,7 @@ export default function AtAGlance() {
   };
 
   return (
-    <section id="glance" className="bg-white">
+    <section id="cifras" className="bg-white">
       {/* CSS local para animaciones (a prueba de Tailwind config) */}
       <style>{`
         @keyframes fadeUp {

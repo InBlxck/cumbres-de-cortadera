@@ -318,7 +318,7 @@ export default function ContactSection() {
                     : "Presentar oferta de inversión"}
                 </h3>
                 <p className="mt-2 text-sm text-white/65">
-                  Completa el formulario y se enviará por correo vía Netlify Forms.
+                  Completa el formulario y nos contactaremos a la brevedad.
                 </p>
               </div>
 
@@ -393,9 +393,6 @@ export default function ContactSection() {
                 </button>
               </div>
 
-              <p className="mt-1 text-xs text-white/50">
-                Tip: en Netlify → Forms → Notifications puedes activar el envío a tu correo.
-              </p>
             </form>
           </div>
         </div>

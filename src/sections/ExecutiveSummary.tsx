@@ -20,8 +20,7 @@ export default function ExecutiveSummary() {
   }, []);
 
   return (
-    <section
-      id="resumen-ejecutivo"
+    <section id="resumen"
       className="relative bg-[#192338] py-20 sm:py-24 lg:py-28 overflow-hidden"
     >
       {/* CSS local para animación */}

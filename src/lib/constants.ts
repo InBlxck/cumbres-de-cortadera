@@ -10,7 +10,7 @@ export const SITE = {
 export const NAV = [
   { label: "Resumen", href: "#resumen" },
   { label: "Cifras", href: "#cifras" },
-  { label: "Inversión", href: "#inversion" },
+  { label: "Inversión", href: "#investors" },
   { label: "Ficha Técnica", href: "#ficha-tecnica" },
   { label: "Ubicación", href: "#ubicacion" },
   { label: "Geología y Operación", href: "#geologia-operacion" },
