@@ -41,12 +41,12 @@ export default function ContactSection() {
   const primary = [
     {
       label: "Teléfono",
-      value: "(+56 9) 61811642",
+      value: "(+56 9) 55279886",
       icon: PhoneIcon,
     },
     {
       label: "Oficina",
-      value: "Huérfanos 1160, Of.1006, Santiago",
+      value: "Amunátegui 277 - piso 12, Santiago",
       icon: PinIcon,
     },
     {
