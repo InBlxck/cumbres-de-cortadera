@@ -8,14 +8,13 @@ export const SITE = {
 };
 
 export const NAV = [
-  { href: "#resumen", label: "Resumen" },
-  { href: "#inversion", label: "Inversión" },
-  { href: "#hitos", label: "Hitos" },
-  { href: "#ficha", label: "Ficha técnica" },
-  { href: "#ubicacion", label: "Ubicación" },
-  { href: "#galeria", label: "Galería" },
-  { href: "#documentos", label: "Data Room" },
-  { href: "#contacto", label: "Contacto" },
+  { label: "Resumen", href: "#resumen" },
+  { label: "Cifras", href: "#cifras" },
+  { label: "Inversión", href: "#inversion" },
+  { label: "Ficha Técnica", href: "#ficha-tecnica" },
+  { label: "Ubicación", href: "#ubicacion" },
+  { label: "Geología y Operación", href: "#geologia-operacion" },
+  { label: "Plan de Cierre", href: "#plan-cierre" },
 ];
 
 export const STATS = [

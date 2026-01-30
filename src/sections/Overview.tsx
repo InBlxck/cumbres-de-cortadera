@@ -1,105 +1,59 @@
-import React from "react";
+import ImageCard from "../components/ImageCard";
 
-// ✅ Tus fotos locales
+// Imágenes
 import aboutImg from "../assets/photos/about.jpg";
 import investmentImg from "../assets/photos/investment.jpg";
 import locationImg from "../assets/photos/location.jpg";
 
 type OverviewItem = {
   title: string;
-  description: string;
-  imageSrc: string;
-  href?: string;
+  desc: string;
+  imgSrc: string;
 };
-
-function ArrowRight({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      className={`h-6 w-6 ${className}`}
-      aria-hidden="true"
-    >
-      <path
-        d="M5 12h12"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M13 6l6 6-6 6"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export default function Overview() {
   const items: OverviewItem[] = [
     {
       title: "Qué producimos",
-      description:
-        "Resumen de los principales minerales objetivo, enfoque del proyecto y su potencial.",
-      imageSrc: aboutImg,
-      href: "#resumen",
+      desc: "Resumen de los principales minerales objetivo, enfoque del proyecto y su potencial.",
+      imgSrc: aboutImg,
     },
     {
       title: "Dónde operamos",
-      description:
-        "Contexto territorial, acceso, infraestructura y cercanía a servicios relevantes.",
-      imageSrc: locationImg,
-      href: "#ubicacion",
+      desc: "Contexto territorial, acceso, infraestructura y cercanía a servicios relevantes.",
+      imgSrc: locationImg,
     },
     {
       title: "Inversión",
-      description:
-        "Estructura, modalidad e hitos para evaluación. Acceso a documentación técnica.",
-      imageSrc: investmentImg,
-      href: "#inversion",
+      desc: "Estructura, modalidad e hitos para evaluación. Acceso a documentación técnica.",
+      imgSrc: investmentImg,
     },
   ];
 
   return (
-    <section className="bg-white">
-      {/* Mismo ancho que el Hero (1350px) + subir las tarjetas */}
-      <div className="mx-auto max-w-[1350px] px-6 pt-6 pb-14 -mt-24 md:-mt-28 lg:-mt-32">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+    <section className="bg-[#EEF1F2] pt-12 pb-20 lg:pt-14 lg:pb-24">
+      <div className="mx-auto max-w-[1320px] px-6">
+        {/* Header sección */}
+        <div className="max-w-[720px]">
+          <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
+            Visión general del proyecto
+          </h2>
+          <p className="mt-3 text-sm md:text-base text-slate-600 leading-relaxed">
+            Una mirada clara a los principales pilares del activo: producción,
+            ubicación e inversión.
+          </p>
+        </div>
+
+        {/* Cards */}
+        <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-10">
           {items.map((item) => (
-            <a
+            <ImageCard
               key={item.title}
-              href={item.href ?? "#"}
-              className="group block overflow-hidden rounded-2xl bg-white shadow-[0_18px_50px_rgba(0,0,0,0.08)] ring-1 ring-black/5 transition-transform hover:-translate-y-0.5"
-            >
-              {/* Imagen */}
-              <div className="relative h-52 w-full overflow-hidden sm:h-56">
-                <img
-                  src={item.imageSrc}
-                  alt={item.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  loading="lazy"
-                />
-              </div>
-
-              {/* Contenido */}
-              <div className="p-7">
-                <h3 className="text-xl font-semibold text-black/85">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-black/60">
-                  {item.description}
-                </p>
-
-                {/* Flecha (color del fondo del logo) */}
-                <div className="mt-7">
-                  <span className="inline-flex items-center gap-2 text-[#0B1B2B]">
-                    <ArrowRight className="transition-transform group-hover:translate-x-1" />
-                  </span>
-                </div>
-              </div>
-            </a>
+              title={item.title}
+              desc={item.desc}
+              imgSrc={item.imgSrc}
+              imgAlt={item.title}
+            />
           ))}
         </div>
       </div>

@@ -170,16 +170,16 @@ export default function TechnicalSheet() {
   ];
 
   return (
-    <section id="ficha-tecnica" className="bg-white py-20">
+    <section id="ficha-tecnica" className="bg-[#E2E2E2] py-20">
       <div className="mx-auto max-w-[1120px] px-4 sm:px-6 lg:px-8">
         {/* Header más elegante */}
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-[0_10px_24px_rgba(0,0,0,0.05)]">
-            <span className="h-2 w-2 rounded-full bg-brand" />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-700">
-              Especificaciones
-            </p>
-          </div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#C58B1E] bg-[#C58B1E] px-4 py-2 shadow-[0_10px_24px_rgba(0,0,0,0.12)]">
+          
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white">
+            Especificaciones
+          </p>
+        </div>
 
           <h2 className="mt-6 text-3xl sm:text-4xl font-semibold text-slate-900">
             Ficha Técnica del Proyecto

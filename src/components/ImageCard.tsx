@@ -1,32 +1,68 @@
-import type { ReactNode } from "react";
-
 export default function ImageCard({
   title,
-  subtitle,
-  imageSrc,
-  children,
+  desc,
+  imgSrc,
+  imgAlt,
 }: {
   title: string;
-  subtitle?: string;
-  imageSrc: string;
-  children?: ReactNode;
+  desc: string;
+  imgSrc: string;
+  imgAlt: string;
 }) {
   return (
-    <div className="grid lg:grid-cols-2 gap-6 items-stretch">
-      <div className="rounded-3xl border border-white/10 bg-card/30 p-7">
-        <div className="text-xl font-semibold">{title}</div>
-        {subtitle && <p className="mt-3 text-muted leading-relaxed">{subtitle}</p>}
-        {children && <div className="mt-5">{children}</div>}
+    <div className="relative pt-[140px]">
+      {/* Círculo flotante */}
+      <div className="absolute left-1/2 top-0 -translate-x-1/2">
+        <div className="h-[210px] w-[210px] overflow-hidden rounded-full border-[6px] border-[#CCCCCF] bg-white shadow-[0_14px_30px_rgba(0,0,0,0.20)]">
+          <img
+            src={imgSrc}
+            alt={imgAlt}
+            className="h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
       </div>
 
-      <div className="rounded-3xl overflow-hidden border border-white/10 bg-white/5 relative">
-        <img
-          src={imageSrc}
-          alt={title}
-          className="h-full w-full object-cover opacity-90"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-bg/70 via-transparent to-transparent" />
+      {/* Tarjeta */}
+      <div
+        className="
+          rounded-3xl
+          bg-[#F3F5F6]
+          px-20
+          pb-14
+          pt-[110px]
+          text-center
+          shadow-[0_24px_60px_rgba(0,0,0,0.14)]
+          min-h-[420px]
+        "
+      >
+        {/* Título con rectángulo uniforme */}
+        <div className="flex justify-center">
+          <div
+            className="
+              flex
+              h-[40px] md:h-[42px]
+              w-full max-w-[260px] md:max-w-[280px]
+              items-center
+              justify-center
+              rounded-lg
+              border
+              border-[#E2E2E2]
+              bg-[#E2E2E2]
+              px-4
+            "
+          >
+            <h3 className="text-[18px] md:text-[20px] font-semibold text-[#192338]">
+              {title}
+            </h3>
+          </div>
+        </div>
+
+        {/* Descripción */}
+        <p className="mx-auto mt-5 max-w-[40ch] text-[18px] leading-relaxed text-slate-600">
+          {desc}
+        </p>
       </div>
     </div>
   );

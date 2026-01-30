@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function ClosurePlan() {
   const items = [
     {
@@ -23,7 +25,7 @@ export default function ClosurePlan() {
   ];
 
   return (
-    <section id="cierre" className="relative overflow-hidden bg-[#0b0f18] py-20">
+    <section id="cierre" className="relative overflow-hidden bg-[#192338] py-20">
       {/* Fondo suave */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-24 left-1/2 h-80 w-[980px] -translate-x-1/2 rounded-full bg-white/[0.06] blur-3xl" />
@@ -31,68 +33,105 @@ export default function ClosurePlan() {
       </div>
 
       <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <p className="text-xs uppercase tracking-[0.2em] text-brand">
-            RESPONSABILIDAD AMBIENTAL
-          </p>
+        {/* Layout más bonito: 2 columnas (texto + cards) */}
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-start">
+          {/* Columna texto */}
+          <div className="lg:col-span-5">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#C58B1E] px-4 py-2 shadow-sm">
 
-          <h2 className="mt-3 text-3xl sm:text-4xl font-semibold text-white">
-            Plan de Cierre
-          </h2>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white">
+                Responsabilidad ambiental
+              </p>
+            </div>
 
-          <div className="mx-auto mt-4 h-[3px] w-16 rounded-full bg-brand" />
+            <h2 className="mt-5 text-3xl sm:text-4xl font-semibold text-white">
+              Plan de Cierre
+            </h2>
 
-          <p className="mx-auto mt-6 max-w-3xl text-sm sm:text-base text-white/60">
-            La Declaración de Plan de Cierre contempla medidas de mitigación y cierre progresivo,
-            ajustándose a la{" "}
-            <span className="font-semibold text-brand">Ley N°20.551</span> y su reglamento.
-          </p>
-        </div>
+            <div className="mt-5 h-[3px] w-16 rounded-full bg-brand" />
 
-        {/* Cards */}
-        <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((it) => {
-            const Icon = it.icon;
+            <p className="mt-6 max-w-prose text-sm sm:text-base text-white/65 leading-relaxed">
+              La Declaración de Plan de Cierre contempla medidas de mitigación y
+              cierre progresivo, ajustándose a la{" "}
+              <span className="font-semibold text-brand">Ley N°20.551</span> y su
+              reglamento.
+            </p>
 
-            return (
-              <article
-                key={it.title}
-                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.18)] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_26px_75px_rgba(15,23,42,0.22)]"
-              >
-                {/* acento superior */}
-                <div className="h-[3px] w-full bg-brand" />
+            {/* Mini bloque extra (se ve “pro” y ordena la lectura) */}
+            <div className="mt-7 rounded-2xl border border-white/10 bg-white/[0.06] p-5 backdrop-blur">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
+                Enfoque
+              </p>
+              <p className="mt-2 text-sm text-white/65 leading-relaxed">
+                Medidas claras, ejecutables y trazables para cierre seguro,
+                cumplimiento y monitoreo posterior.
+              </p>
+            </div>
+          </div>
 
-                <div className="p-6">
-                  <div className="flex items-start gap-4">
-                    {/* icono */}
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand text-black shadow-sm ring-1 ring-black/10">
-                      <Icon className="h-6 w-6" />
-                    </div>
+          {/* Columna cards */}
+          <div className="lg:col-span-7">
+            <div className="relative">
+              {/* Borde/halo suave alrededor del grid */}
+              <div className="pointer-events-none absolute -inset-3 sm:-inset-4 rounded-[28px] bg-white/[0.04]" />
 
-                    <div className="min-w-0">
-                      <h3 className="text-base font-semibold text-slate-900">
+              <div className="relative grid grid-cols-1 gap-5 sm:grid-cols-2">
+                {items.map((it, idx) => {
+                  const Icon = it.icon;
+                  const step = String(idx + 1).padStart(2, "0");
+
+                  return (
+                    <article
+                      key={it.title}
+                      className={[
+                        "group relative overflow-hidden rounded-2xl",
+                        "border border-white/10 bg-white/[0.06] backdrop-blur",
+                        "p-6",
+                        "shadow-[0_18px_55px_rgba(0,0,0,0.35)]",
+                        "transition-all duration-300",
+                        "hover:-translate-y-[2px] hover:bg-white/[0.08]",
+                      ].join(" ")}
+                    >
+                      {/* Glow sutil */}
+                      <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
+                        <div className="absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-brand/15 blur-2xl" />
+                      </div>
+
+                      {/* Header card: step + icon */}
+                      <div className="relative flex items-start justify-between gap-4">
+                        <div className="inline-flex items-center gap-2">
+                          <span className="inline-flex h-7 items-center rounded-full border border-white/10 bg-black/25 px-3 text-[11px] font-semibold tracking-[0.22em] text-white/80">
+                            PASO {step}
+                          </span>
+                        </div>
+
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-black/35 text-[#C58B1E] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.10)]">
+                          <Icon className="h-6 w-6" />
+                        </div>
+                      </div>
+
+                      <h3 className="relative mt-4 text-base font-semibold text-white">
                         {it.title}
                       </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-slate-600">
+
+                      <p className="relative mt-2 text-sm leading-relaxed text-white/65">
                         {it.desc}
                       </p>
-                    </div>
-                  </div>
-                </div>
 
-                {/* brillo muy sutil en hover */}
-                <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
-                  <div className="absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-brand/10 blur-2xl" />
-                </div>
-              </article>
-            );
-          })}
-        </div>
+                      {/* Linea inferior que aparece en hover */}
+                      <div className="relative mt-5 h-[2px] w-12 rounded-full bg-brand/70 opacity-60 transition group-hover:opacity-100" />
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
 
-        {/* Nota */}
-        <div className="mt-10 text-center text-sm text-white/55">
-          Coordinación y documentación asociada disponible vía Data Room bajo solicitud.
+            {/* Nota */}
+            <div className="mt-8 text-center text-sm text-white/55">
+              Coordinación y documentación asociada disponible vía Data Room bajo
+              solicitud.
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -109,8 +148,18 @@ function WarningIcon({ className = "h-6 w-6" }: { className?: string }) {
         strokeWidth="2"
         strokeLinejoin="round"
       />
-      <path d="M12 9v5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <path d="M12 17h.01" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+      <path
+        d="M12 9v5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M12 17h.01"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -137,7 +186,12 @@ function LeafIcon({ className = "h-6 w-6" }: { className?: string }) {
         strokeWidth="2"
         strokeLinejoin="round"
       />
-      <path d="M7 15c2-2 5-4 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M7 15c2-2 5-4 10-5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

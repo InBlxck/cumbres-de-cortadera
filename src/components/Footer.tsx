@@ -1,8 +1,8 @@
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-slate-200">
-      <div className="mx-auto max-w-[1200px] px-6 py-8">
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+    <footer className="bg-[#E2E2E2] border-white/10 min-h-[150px] flex items-center">
+    <div className="mx-auto max-w-[1200px] px-6 w-full">
+      <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
           
           {/* Bloque izquierdo */}
           <div className="text-sm text-slate-600">

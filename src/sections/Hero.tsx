@@ -135,9 +135,7 @@ export default function Hero() {
 
   return (
     <section id="top" className="relative pt-[var(--nav-h)]">
-      {/* ✅ Wrapper general */}
       <div className="relative w-full overflow-visible">
-        {/* ✅ HERO */}
         <div className="relative w-full overflow-hidden">
           <div className="relative h-[75vh] sm:h-[85vh] lg:h-[90vh] min-h-[520px] sm:min-h-[560px] w-full">
             <img
@@ -151,11 +149,9 @@ export default function Hero() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/35" />
 
-            {/* texto */}
             <div className="absolute inset-0">
               <Wide>
-                 <div className="flex h-full items-start pt-[calc(var(--nav-h)+12rem)] sm:pt-[calc(var(--nav-h)+18rem)] lg:pt-[calc(var(--nav-h)+14rem)]">
-
+                <div className="flex h-full items-start pt-[calc(var(--nav-h)+12rem)] sm:pt-[calc(var(--nav-h)+18rem)] lg:pt-[calc(var(--nav-h)+14rem)]">
                   <div className="max-w-[640px] pl-6 sm:pl-10 lg:pl-28">
                     <div className="text-xs md:text-sm font-semibold tracking-widest uppercase text-white/70">
                       Proyecto minero · Chile
@@ -195,99 +191,71 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ✅ TRANSICIÓN */}
+        {/* TRANSICIÓN */}
         <div className="relative">
-          {/* Blanco base (responsive) */}
           <div className="absolute inset-x-0 bottom-0 h-[220px] sm:h-[240px] lg:h-[260px] bg-white" />
 
           <Wide>
             <div className="relative">
-              {/* Tarjeta flotante (responsive translate) */}
               <div className="absolute left-1/2 top-0 z-20 w-full max-w-[1350px] -translate-x-1/2 -translate-y-[18%] sm:-translate-y-[22%] lg:-translate-y-[25%] rounded-3xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.14)] overflow-hidden">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-                  <a
-                    href="#resumen"
-                    className="group p-6 sm:p-8 min-h-[260px] sm:min-h-[320px] lg:min-h-[400px] border-b border-black/10 md:border-r md:border-b lg:border-b-0 lg:border-r flex flex-col"
-                  >
-                    <TileIcon variant="doc" />
-                    <h3 className="mt-5 text-lg font-semibold text-black/85 leading-snug">
-                      Resumen del proyecto
-                    </h3>
-
-                    <p className="mt-3 text-sm text-black/60 leading-relaxed">
-                      Presentación breve del activo y próximos pasos.
-                    </p>
-
-                    <span className="mt-auto pt-6 text-brand font-semibold">
-                      <span className="inline-block text-[#0B2E2B] transition-transform group-hover:translate-x-1">
+                  {[
+                    {
+                      icon: "doc",
+                      title: "Resumen del proyecto",
+                      text: "Presentación breve del activo y próximos pasos.",
+                    },
+                    {
+                      icon: "globe",
+                      title: "Ubicación & acceso",
+                      text: "Región, entorno e infraestructura relevante.",
+                    },
+                    {
+                      icon: "handshake",
+                      title: "Oportunidad de inversión",
+                      text: "Estructura, modalidad e hitos.",
+                    },
+                    {
+                      icon: "people",
+                      title: "Contacto & Data Room",
+                      text: "Acceso a información y documentos.",
+                    },
+                  ].map((item, i) => (
+                    <a
+                      key={i}
+                      href="#resumen"
+                      className="
+                        group
+                        bg-white
+                        p-6 sm:p-8
+                        min-h-[260px] sm:min-h-[320px] lg:min-h-[400px]
+                        border border-black/5
+                        flex flex-col
+                        transition
+                        hover:bg-slate-50
+                      "
+                    >
+                      <TileIcon variant={item.icon as any} />
+                      <h3 className="mt-5 text-lg font-semibold text-black/85 leading-snug">
+                        {item.title}
+                      </h3>
+                      <p className="mt-3 text-sm text-black/60 leading-relaxed">
+                        {item.text}
+                      </p>
+                      <span className="mt-auto pt-6 font-semibold text-[#C58B1E] transition-transform group-hover:translate-x-1">
                         <ArrowRight />
                       </span>
-                    </span>
-                  </a>
-
-                  <a
-                    href="#ubicacion"
-                    className="group p-6 sm:p-8 min-h-[220px] sm:min-h-[260px] lg:min-h-[400px] border-b border-black/10 md:border-b lg:border-b-0 lg:border-r flex flex-col"
-                  >
-                    <TileIcon variant="globe" />
-                    <h3 className="mt-5 text-lg font-semibold text-black/85 leading-snug">
-                      Ubicación & acceso
-                    </h3>
-                    <p className="mt-3 text-sm text-black/60 leading-relaxed">
-                      Región, entorno e infraestructura relevante.
-                    </p>
-                    <span className="mt-auto pt-6 text-brand font-semibold">
-                      <span className="inline-block text-[#0B2E2B] transition-transform group-hover:translate-x-1">
-                        <ArrowRight />
-                      </span>
-                    </span>
-                  </a>
-
-                  <a
-                    href="#inversion"
-                    className="group p-6 sm:p-8 min-h-[220px] sm:min-h-[260px] lg:min-h-[400px] border-b border-black/10 md:border-r md:border-b-0 lg:border-r flex flex-col"
-                  >
-                    <TileIcon variant="handshake" />
-                    <h3 className="mt-5 text-lg font-semibold text-black/85 leading-snug">
-                      Oportunidad de inversión
-                    </h3>
-                    <p className="mt-3 text-sm text-black/60 leading-relaxed">
-                      Estructura, modalidad e hitos.
-                    </p>
-                    <span className="mt-auto pt-6 text-brand font-semibold">
-                      <span className="inline-block text-[#0B2E2B] transition-transform group-hover:translate-x-1">
-                        <ArrowRight />
-                      </span>
-                    </span>
-                  </a>
-
-                  <a
-                    href="#contacto"
-                    className="group p-6 sm:p-8 min-h-[220px] sm:min-h-[260px] lg:min-h-[400px] md:border-b-0 flex flex-col"
-                  >
-                    <TileIcon variant="people" />
-                    <h3 className="mt-5 text-lg font-semibold text-black/85 leading-snug">
-                      Contacto & Data Room
-                    </h3>
-                    <p className="mt-3 text-sm text-black/60 leading-relaxed">
-                      Acceso a información y documentos.
-                    </p>
-                    <span className="mt-auto pt-6 text-brand font-semibold">
-                      <span className="inline-block text-[#0B2E2B] transition-transform group-hover:translate-x-1">
-                        <ArrowRight />
-                      </span>
-                    </span>
-                  </a>
+                    </a>
+                  ))}
                 </div>
               </div>
 
-              {/* ✅ Spacer responsive */}
               <div className="h-[260px] sm:h-[300px] lg:h-[400px]" />
             </div>
           </Wide>
 
-          {/* ✅ Continuidad blanca */}
-          <div className="bg-white h-16 sm:h-20 lg:h-24" />
+          {/* ✅ MENOS “colchón” antes del Overview */}
+          <div className="bg-white h-6 sm:h-8 lg:h-10" />
         </div>
       </div>
     </section>

@@ -71,11 +71,11 @@ export default function GeologyAndMining() {
               ))}
             </ul>
 
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <div className="mt-6 rounded-2xl border border-[#C58B1E]/40 bg-[#C58B1E]/10 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#C58B1E]">
                 Nota técnica
               </p>
-              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+              <p className="mt-2 text-sm text-[#7A5A16] leading-relaxed">
                 Síntesis operativa. Documentación completa y referencias disponibles vía Data Room bajo solicitud.
               </p>
             </div>

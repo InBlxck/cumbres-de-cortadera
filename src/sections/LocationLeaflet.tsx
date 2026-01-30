@@ -113,9 +113,9 @@ function StatCard({
 
       <div className="relative flex items-start gap-4">
         {/* Ícono BLANCO, siempre visible */}
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-black/45 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)]">
-          {icon}
-        </div>
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-black/45 text-[#C58B1E] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)]">
+        {icon}
+      </div>
 
         <div>
           <p className="text-[11px] uppercase tracking-[0.18em] text-white/60">
@@ -171,7 +171,7 @@ export default function LocationLeaflet() {
   }, [A[0], A[1], B[0], B[1]]);
 
   return (
-    <section id="ubicacion" className="relative overflow-hidden bg-[#0b0f18] py-20">
+    <section id="ubicacion" className="relative overflow-hidden bg-[#192338] py-20">
       {/* Fondo suave */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-24 left-1/2 h-80 w-[900px] -translate-x-1/2 rounded-full bg-white/[0.06] blur-3xl" />
@@ -194,42 +194,42 @@ export default function LocationLeaflet() {
         {/* Barra coherente: Inicio → Ruta → Tiempo → Destino */}
         <div className="mb-6">
           <div className="mx-auto max-w-[980px] rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-4 backdrop-blur-md">
-            <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-white/80">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-white">
               <div className="inline-flex items-center gap-2">
                 <span className="grid h-6 w-6 place-items-center rounded-full bg-green-500 text-[12px] font-bold text-white">
                   A
                 </span>
                 <span className="font-semibold text-white">Copiapó</span>
-                <span className="text-white/55">(Inicio)</span>
+                <span className="text-white">(Inicio)</span>
               </div>
 
-              <span className="text-white/35">→</span>
+              <span className="text-white">→</span>
 
               <div className="inline-flex items-center gap-2">
                 <span className="inline-block h-2 w-2 rounded-full bg-brand" />
-                <span className="text-white/75">Ruta Internacional</span>
+                <span className="text-white">Ruta Internacional</span>
               </div>
 
-              <span className="text-white/35">→</span>
+              <span className="text-white">→</span>
 
               <div className="inline-flex items-center gap-2">
-                <span className="text-white/55">Tiempo total</span>
+                <span className="text-white">Tiempo total</span>
                 <span className="font-semibold text-white">1h 30min</span>
               </div>
 
-              <span className="text-white/35">→</span>
+              <span className="text-white">→</span>
 
               <div className="inline-flex items-center gap-2">
                 <span className="grid h-6 w-6 place-items-center rounded-full bg-red-500 text-[12px] font-bold text-white">
                   B
                 </span>
                 <span className="font-semibold text-white">Cumbres de Cortadera</span>
-                <span className="text-white/55">(Destino)</span>
+                <span className="text-white">(Destino)</span>
               </div>
             </div>
           </div>
 
-          <p className="mt-2 text-center text-xs text-white/45">
+          <p className="mt-2 text-center text-xs text-white">
             Referencia de traslado por vía principal. Puede variar según condiciones de ruta y logística.
           </p>
         </div>

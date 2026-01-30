@@ -2,7 +2,7 @@ export default function ExecutiveSummary() {
   return (
     <section
       id="resumen-ejecutivo"
-      className="relative bg-[#070b12] py-20 sm:py-24 lg:py-28 overflow-hidden"
+      className="relative bg-[#192338] py-20 sm:py-24 lg:py-28 overflow-hidden"
     >
       {/* Fondo suave */}
       <div className="pointer-events-none absolute inset-0">

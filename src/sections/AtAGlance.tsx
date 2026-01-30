@@ -38,7 +38,7 @@ export default function AtAGlance() {
             </h2>
 
             {/* Acento dorado */}
-            <div className="mt-5 h-[3px] w-14 rounded-full bg-[#C08A2D]" />
+            <div className="mt-3 h-[3px] w-[60%] rounded-full bg-[#C08A2D]" />
 
             <p className="mt-7 text-base sm:text-lg leading-relaxed text-black/70 max-w-prose">
               Resumen rápido de los principales parámetros del proyecto, para

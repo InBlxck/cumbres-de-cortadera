@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function ContactSection() {
   const primary = [
     {
@@ -51,72 +53,146 @@ export default function ContactSection() {
           </p>
         </div>
 
-        {/* Datos principales */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {primary.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={item.label}
-                className="rounded-2xl border border-white/15 bg-[#0b0f18] p-7
-                           shadow-[0_20px_50px_rgba(0,0,0,0.28)]
-                           ring-1 ring-white/5
-                           transition hover:-translate-y-[2px] hover:shadow-[0_26px_70px_rgba(0,0,0,0.35)]"
-              >
-                <div className="flex items-start gap-4">
-                  {/* ✅ icono blanco + contorno */}
-                  <div
-                    className="flex h-12 w-12 items-center justify-center rounded-xl
-                               border border-white/20 bg-white/10 text-white
-                               shadow-[0_10px_24px_rgba(0,0,0,0.30)]"
-                  >
-                    <Icon className="h-6 w-6" />
-                  </div>
+        {/* Layout pro: Info (izq) + Acciones (der) */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+          {/* IZQ: Tarjeta grande con datos */}
+          <div className="lg:col-span-5">
+            <div
+              className={[
+                "rounded-3xl bg-[#192338] p-8",
+                "shadow-[0_22px_60px_rgba(0,0,0,0.22)] ring-1 ring-white/5",
+                "border border-white/10",
+              ].join(" ")}
+            >
+              <div className="flex items-start justify-between gap-6">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/65">
+                    Información de contacto
+                  </p>
+                  <h3 className="mt-2 text-xl font-semibold text-white">
+                    Coordinación & Data Room
+                  </h3>
+                </div>
 
-                  <div>
-                    <p className="text-sm text-white/60">{item.label}</p>
-                    <p className="mt-2 text-base font-semibold text-white">
-                      {item.value}
-                    </p>
-                  </div>
+                <div className="hidden sm:block">
+                  <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/80">
+                    Respuesta rápida
+                  </span>
                 </div>
               </div>
-            );
-          })}
-        </div>
 
-        {/* Acciones */}
-        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {actions.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={item.title}
-                className="rounded-2xl border border-white/15 bg-[#0b0f18] p-8
-                           shadow-[0_20px_50px_rgba(0,0,0,0.28)]
-                           ring-1 ring-white/5
-                           transition hover:-translate-y-[2px] hover:shadow-[0_26px_70px_rgba(0,0,0,0.35)]"
-              >
-                <div className="flex items-start gap-5">
-                  {/* ✅ icono blanco + contorno */}
-                  <div
-                    className="flex h-12 w-12 items-center justify-center rounded-xl
-                               border border-white/20 bg-white/10 text-white
-                               shadow-[0_10px_24px_rgba(0,0,0,0.30)]"
-                  >
-                    <Icon className="h-6 w-6" />
-                  </div>
+              <div className="mt-7 space-y-4">
+                {primary.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={item.label}
+                      className={[
+                        "flex items-start gap-4 rounded-2xl",
+                        "border border-white/10 bg-white/[0.06] p-5",
+                        "transition hover:bg-white/[0.08]",
+                      ].join(" ")}
+                    >
+                      <div
+                        className={[
+                          "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl",
+                          "border border-white/20 bg-white/10 text-white",
+                          "shadow-[0_10px_24px_rgba(0,0,0,0.30)]",
+                        ].join(" ")}
+                      >
+                        <Icon className="h-6 w-6" />
+                      </div>
 
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-sm text-white/65">{item.desc}</p>
-                  </div>
-                </div>
+                      <div className="min-w-0">
+                        <p className="text-sm text-white/60">{item.label}</p>
+                        <p className="mt-1 text-base font-semibold text-white">
+                          {item.value}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
+
+              <div className="mt-7 h-px w-full bg-white/10" />
+
+              <p className="mt-6 text-sm text-white/60 leading-relaxed">
+                Si requiere acceso a documentación técnica, podemos habilitar el
+                Data Room bajo solicitud.
+              </p>
+            </div>
+          </div>
+
+          {/* DER: Acciones (en columna: Oferta debajo de Reunión) */}
+          <div className="lg:col-span-7 flex flex-col justify-center">
+            <div className="grid grid-cols-1 gap-6">
+              {actions.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={item.title}
+                    className={[
+                      "group relative overflow-hidden rounded-3xl",
+                      "bg-[#192338] p-8",
+                      "shadow-[0_22px_60px_rgba(0,0,0,0.22)] ring-1 ring-white/5",
+                      "border border-white/10",
+                      "transition hover:-translate-y-[2px] hover:shadow-[0_28px_75px_rgba(0,0,0,0.30)]",
+                    ].join(" ")}
+                  >
+                    {/* Glow sutil */}
+                    <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
+                      <div className="absolute -top-24 -right-24 h-56 w-56 rounded-full bg-brand/15 blur-3xl" />
+                    </div>
+
+                    <div className="relative">
+                      <div className="flex items-start justify-between gap-5">
+                        <div
+                          className={[
+                            "flex h-12 w-12 items-center justify-center rounded-xl",
+                            "border border-white/20 bg-white/10 text-white",
+                            "shadow-[0_10px_24px_rgba(0,0,0,0.30)]",
+                          ].join(" ")}
+                        >
+                          <Icon className="h-6 w-6" />
+                        </div>
+
+                        <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/70">
+                          Acción
+                        </span>
+                      </div>
+
+                      <h3 className="mt-5 text-lg font-semibold text-white">
+                        {item.title}
+                      </h3>
+
+                      <p className="mt-2 text-sm text-white/65 leading-relaxed">
+                        {item.desc}
+                      </p>
+
+                      <div className="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black/90 transition hover:bg-white/90">
+                        Continuar <span className="text-black/70">→</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* TIP abajo centrado (ocupa todo el ancho) */}
+          <div className="lg:col-span-12">
+            <div className="mt-2 flex justify-center">
+              <div className="w-full max-w-[760px] rounded-2xl border border-[#C58B1E]/30 bg-[#FFF6E6] px-6 py-4 text-center">
+                <p className="text-sm text-[#7A5A12] leading-relaxed">
+                  <span className="font-semibold uppercase tracking-wide text-[#C58B1E]">
+                    Tip:
+                  </span>{" "}
+                  Si ya tiene una propuesta, adjunte un resumen ejecutivo y su estructura
+                  de inversión sugerida.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
